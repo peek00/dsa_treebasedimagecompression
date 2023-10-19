@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,23 +12,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class NodeSizeComparator implements Comparator<Node> {
-    /**
-     * Comparator created to compare two Node objects by the size of the ArrayList
-     * Used to sort the rgb values by how many pixels have the same color
-     */
+class NodeComparator implements Comparator<Node> {
     @Override
     public int compare(Node node1, Node node2) {
-        // Compare the sizes of ArrayLists in Node objects
-        return Integer.compare(node1.coordinates.size(), node2.coordinates.size());
+        // First, compare by the Integer (key)
+        int keyComparison = Integer.compare(node1.getRGB(), node2.getRGB());
+        
+        // If the keys are equal, compare by the size of the ArrayList
+        if (keyComparison == 0) {
+            return Integer.compare(node1.getSize(), node2.getSize());
+        }
+        
+        return keyComparison;
     }
 }
 
-class PixelCoordinate {
+class PixelCoordinate implements Serializable {
     /**
      * Honestly just a class to store [int,int]. 
      * I didn't want to nest arraylist inside hashmap.
      */
+    private static final long serialVersionUID = 1L; // Add a default serial version ID
     int x;
     int y;
 
@@ -83,30 +88,6 @@ class Node {
 }
 
 public class Utility {
-
-    public static Node constructTree(List<Map.Entry<Integer, ArrayList<PixelCoordinate>>> entryList, int currentIndex,
-            int depth) {
-        if (currentIndex >= entryList.size() || depth == 0) {
-            // Base case: Stop recursion if we've reached the end of the list or depth is
-            // This code creates a max heap tree (I think) from a sorted list.
-            // Not fully tested
-            return null;
-        }
-
-        // Calculate the index of the left and right children
-        int leftChildIndex = 2 * currentIndex + 1;
-        int rightChildIndex = 2 * currentIndex + 2;
-
-        // Create the current node using the entry at currentIndex
-        Map.Entry<Integer, ArrayList<PixelCoordinate>> currentEntry = entryList.get(currentIndex);
-        Node currentNode = new Node(currentEntry.getKey(), currentEntry.getValue());
-
-        // Recursively construct left and right subtrees
-        currentNode.setLeft(constructTree(entryList, leftChildIndex, depth - 1));
-        currentNode.setRight(constructTree(entryList, rightChildIndex, depth - 1));
-
-        return currentNode;
-    }
 
     public static int compressRGB(int r, int g, int b) {
         /**
@@ -167,20 +148,49 @@ public class Utility {
         for (Map.Entry<Integer, ArrayList<PixelCoordinate>> entry : entryList) {
             nodeList.add(new Node(entry.getKey(), entry.getValue()));
         }
-        System.out.println("RGB " + Arrays.toString(decompressRGB(nodeList.get(0).getRGB())) + " has "
+        System.out.println("RGB " + nodeList.get(0).getRGB() + " has "
                 + nodeList.get(0).getSize());
-        java.util.Collections.sort(nodeList, Collections.reverseOrder(new NodeSizeComparator()));
-        System.out.println("RGB " + Arrays.toString(decompressRGB(nodeList.get(0).getRGB())) + " has "
+        java.util.Collections.sort(nodeList, Collections.reverseOrder(new NodeComparator()));
+        System.out.println("RGB " + nodeList.get(0).getRGB() + " has "
                 + nodeList.get(0).getSize());
+        System.out.println("RGB " + nodeList.get(1).getRGB() + " has "
+                + nodeList.get(1).getSize());
+        System.out.println("RGB " + nodeList.get(2).getRGB() + " has "
+                + nodeList.get(2).getSize());
 
-        // Construct the tree
-        // Node root = constructTree(nodeList, 0, 1);
+        // Compressiong begins here
+        // Given a threshold n, I want to loop through the list and combine the arraySize of things that are too little 
+        // To the previous one
+        int threshold = 100;
+        int prevRGB = -1;
 
-        // System.out.println("In-Order Traversal:");
-        // printInOrder(root);
+        HashMap <Integer, ArrayList<PixelCoordinate>> compressedMap = new HashMap<Integer, ArrayList<PixelCoordinate>>();
+        // Start the loop from the second element (index 1) to the end
+        for (int i = 0; i < nodeList.size(); i++) {
+            Node currentNode = nodeList.get(i);
+            if (prevRGB == -1 || Math.abs(prevRGB - currentNode.getRGB()) >= threshold) {
+                // Create a new mapping
+                compressedMap.put(currentNode.getRGB(), currentNode.getValue());
+                prevRGB = currentNode.getRGB();
+            } else {
+                // Add to previous one
+                ArrayList<PixelCoordinate> existingList = compressedMap.get(prevRGB);
+                existingList.addAll(currentNode.getValue());
+                // Setting prev hashMap to NONE to be garbage collected
+                nodeList.get(i).coordinates = null;
+            }
 
+        }
+
+        System.out.println("Size is now " + nodeList.size());
+        System.out.println("Size is now " + compressedMap.size());
+        System.out.println(compressedMap.getClass());
+
+        // try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
+        //     oos.writeObject(pixels);
+        // }
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
-            oos.writeObject(pixels);
+            oos.writeObject(compressedMap);
         }
     }
 
@@ -193,11 +203,26 @@ public class Utility {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
             Object object = ois.readObject();
 
-            if (object instanceof int[][][]) {
-                return (int[][][]) object;
-            } else {
-                throw new IOException("Invalid object type in the input file");
+            // if (object instanceof int[][][]) {
+            //     return (int[][][]) object;
+            // } else {
+            //     throw new IOException("Invalid object type in the input file");
+            // }
+            int[][][] output = new int[500][375][3];
+            System.out.println(object.getClass());
+            for (Map.Entry<Integer, ArrayList<PixelCoordinate>> entry : ((HashMap<Integer, ArrayList<PixelCoordinate>>) object).entrySet()) {
+                int[] rgbComponents = decompressRGB(entry.getKey());
+                for (PixelCoordinate coord : entry.getValue()) {
+                    output[coord.x][coord.y][0] = rgbComponents[0];
+                    output[coord.x][coord.y][1] = rgbComponents[1];
+                    output[coord.x][coord.y][2] = rgbComponents[2];
+                }
             }
+            // for (HashMap<Integer, ArrayList<PixelCoordinate>> entry : object) {
+            //     System.out.println(entry.getClass());
+            // }
+            // System.out.println(object.getClass());
+            return output;
         }
     }
 
