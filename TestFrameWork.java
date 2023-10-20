@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +15,8 @@ import javax.imageio.ImageIO;
 
 public class TestFrameWork{
     private String testResultFilePath;  
-    private String testImageDirectory = null; 
+    private String testImageDirectory = "Original/"; // default value for the image directory 
+    private String testName = "Default Test Name";
 
 
     /* Constructors */
@@ -34,9 +37,10 @@ public class TestFrameWork{
         }
     }
 
-    public TestFrameWork(String ImageDirectory){
+    public TestFrameWork(String ImageDirectory, String testName){
         this(); 
         this.testImageDirectory = ImageDirectory; // constructor chaining for specifying test image directories 
+        this.testName = testName; 
     }
 
     public void writeToResult(String input){
@@ -51,6 +55,18 @@ public class TestFrameWork{
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
     }
+    
+    public static double getAverage(List<? extends Number> list) {
+        if (list == null || list.isEmpty()) {
+            return 0;
+        }
+
+        double sum = 0;
+        for (Number number : list) {
+            sum += number.doubleValue();
+        }
+        return sum / list.size();
+    }
 
 
     public static void main(String[] args) throws IOException, ClassNotFoundException{
@@ -62,16 +78,21 @@ public class TestFrameWork{
         TestFrameWork testFrameWork = new TestFrameWork(); 
 
         //Define original file directory to loop through
-        String ImageDirectory; 
-        if (testFrameWork.testImageDirectory == null)
-            ImageDirectory = "Original/";
-        else
-            ImageDirectory = testFrameWork.testImageDirectory; 
+        String ImageDirectory = testFrameWork.testImageDirectory; 
         
         
         // List all files in the directory
         File directory = new File(ImageDirectory);
         testFrameWork.writeToResult("Image Directory: " + ImageDirectory);
+
+        /* Stores varies parameters for overall performance analysis*/
+        ArrayList<Long> differenceInFileSizeList = new ArrayList<>(); 
+        ArrayList<Double> compressionRateList = new ArrayList<>(); 
+        ArrayList<Long> compressionTimeList = new ArrayList<>(); 
+        ArrayList<Long> decompressionTimeList = new ArrayList<>(); 
+        ArrayList<Double> maeList = new ArrayList<>(); 
+        ArrayList<Double> mseList = new ArrayList<>(); 
+        ArrayList<Double> psnrList = new ArrayList<>(); 
 
 
         File[] files = directory.listFiles();
@@ -117,6 +138,9 @@ public class TestFrameWork{
                     long compressEndTime = System.currentTimeMillis();
 
                     long compressExecutionTime = compressEndTime - compressStartTime;
+
+                    // add execution time to the list 
+                    compressionTimeList.add(compressExecutionTime);
                     
                     // Execution Time Output 
                     String compressionExecutionTimeOutput = String.format("Compress Execution Time for %s : %d milliseconds", imageName, compressExecutionTime );
@@ -153,6 +177,11 @@ public class TestFrameWork{
                     long differenceInFileSize = originalFileSize - compressedFileSize;
                     double compressionRate = 1- compressedFileSize / originalFileSize; 
 
+                    // Add to the list 
+                    differenceInFileSizeList.add(differenceInFileSize);
+                    compressionRateList.add(compressionRate);
+
+
                     String differenceInFileSizeOutput = String.format("Bytes saved from compression of %s : %d bytes, with compression rate of: %.2f", imageName, differenceInFileSize, compressionRate); 
 
                     testFrameWork.writeToResult(differenceInFileSizeOutput);
@@ -169,6 +198,8 @@ public class TestFrameWork{
                     long decompressEndTime = System.currentTimeMillis();
                     long decompressExecutionTime = decompressEndTime - decompressStartTime;
 
+                    // Add to the list 
+                    decompressionTimeList.add(decompressExecutionTime);
 
                     String decompressionExecutionOutput = String.format("Decompress Execution Time for  %s : %d milliseconds", imageName, decompressExecutionTime);
                     
@@ -188,12 +219,14 @@ public class TestFrameWork{
 
                     //calculate MAE
                     double MAE = MAECalculator.calculateMAE(originalimage, decompressedimage);
+                    maeList.add(MAE);
                     String maeOutput = String.format("Mean Absolute Error of : %S is: %.2f",imageName ,MAE); 
                     System.out.println(maeOutput);
                     testFrameWork.writeToResult(maeOutput);
 
                     //calculate MSE
                     double MSE = MSECalculator.calculateMSE(originalimage, decompressedimage);
+                    mseList.add(MSE);
                     System.out.println("Mean Squared Error of :" + imageName + " is " + MSE) ;
                     String mseOutput = String.format("Mean Squared Error of : %S is: %.2f",imageName ,MSE); 
                     System.out.println(mseOutput);
@@ -201,15 +234,30 @@ public class TestFrameWork{
 
                     //calculate PSNR
                     double PSNR = PSNRCalculator.calculatePSNR(originalimage, decompressedimage);
+                    psnrList.add(PSNR); 
                     System.out.println("PSNR of :" + imageName + " is " + PSNR);   
                     String psnrOutput = String.format("Mean Absolute Error of : %S is: %.2f",imageName ,PSNR); 
                     System.out.println(psnrOutput);
                     testFrameWork.writeToResult(psnrOutput);
                     testFrameWork.writeToResult("================================================================================");
-
                 }
             }
         }
+        /* Process the summary Statistics */
+        testFrameWork.processAverageStatistics(compressionTimeList, "compression time");
+        testFrameWork.processAverageStatistics(differenceInFileSizeList, "difference in file size");
+        testFrameWork.processAverageStatistics(compressionRateList, "compression rate");
+        testFrameWork.processAverageStatistics(decompressionTimeList, "decompression");                
+        testFrameWork.processAverageStatistics(maeList, "MAE");
+        testFrameWork.processAverageStatistics(mseList, "MSE");
+        testFrameWork.processAverageStatistics(psnrList, "PSNR");
 
+    }
+
+    public void processAverageStatistics(List<? extends Number> parameterList, String parameterName){
+        double averageParameterValue = getAverage(parameterList); 
+        String parameterOutput = String.format("The average %s is: %.2f for test: %s", parameterName, averageParameterValue, testName); 
+        System.out.println(parameterOutput);
+        writeToResult(parameterOutput);
     }
 }
