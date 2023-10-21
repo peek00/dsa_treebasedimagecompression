@@ -244,13 +244,13 @@ public class TestFrameWork{
             }
         }
         /* Process the summary Statistics */
-        testFrameWork.processAverageStatistics(compressionTimeList, "compression time", "+ve", "lower");
-        testFrameWork.processAverageStatistics(differenceInFileSizeList, "difference in file size", "+ve", "lower");
-        testFrameWork.processAverageStatistics(compressionRateList, "compression rate", "+ve", "lower");
-        testFrameWork.processAverageStatistics(decompressionTimeList, "decompression", "+ve", "lower");                
-        testFrameWork.processAverageStatistics(maeList, "MAE", "+ve", "lower");
-        testFrameWork.processAverageStatistics(mseList, "MSE", "+ve", "lower");
-        testFrameWork.processAverageStatistics(psnrList, "PSNR", "+ve", "higher");
+        testFrameWork.processAverageStatistics(compressionTimeList, "compression time", "+ve", "LOWER");
+        testFrameWork.processAverageStatistics(differenceInFileSizeList, "difference in file size", "+ve", "HIGHER");
+        testFrameWork.processAverageStatistics(compressionRateList, "compression rate", "+ve", "HIGHER");
+        testFrameWork.processAverageStatistics(decompressionTimeList, "decompression", "+ve", "LOWER");                
+        testFrameWork.processAverageStatistics(maeList, "MAE", "+ve", "LOWER");
+        testFrameWork.processAverageStatistics(mseList, "MSE", "+ve", "LOWER");
+        testFrameWork.processAverageStatistics(psnrList, "PSNR", "+ve", "HIGHER");
 
     }
 
