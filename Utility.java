@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -129,7 +130,7 @@ public class Utility {
         }
         java.util.Collections.sort(nodeList, Collections.reverseOrder(new NodeComparator()));
   
-        int threshold = 25000;
+        int threshold = 1000;
         int prevRGB = -1;
 
         HashMap<Integer, ArrayList<int[]>> compressedMap = new HashMap<Integer, ArrayList<int[]>>();
@@ -150,26 +151,53 @@ public class Utility {
         }
 
 
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
-            oos.writeShort(pixels.length); // Write the original width
-            oos.writeShort(pixels[0].length); // Write the original height
-
-            // Loop thorugh
-            for (Map.Entry<Integer, ArrayList<int[]>> entry : compressedMap.entrySet()) {
-                // Write the rgb value as 3 bytes
-                int[] rgbComponents = decompressRGB(entry.getKey());
-                for (int i = 0; i < 3; i++) {
-                    byte val = compressToByte(rgbComponents[i]);
-                    // Write to thing
-                    oos.writeByte(val);
-                }
-                oos.writeShort(entry.getValue().size()); // Write the size of the ArrayList
-                for (int[] coord : entry.getValue()) {
-                    oos.writeShort(coord[0]); // Write the x coordinate
-                    oos.writeShort(coord[1]); // Write the y coordinate
-                }
+        // Before writing to file, need to sort by the order
+        int fixedLength = width * height;
+        List<Byte[]> byteList = new ArrayList<>(Collections.nCopies(fixedLength, null));
+        int count = 0;
+        for (Map.Entry<Integer, ArrayList<int[]>> entry : compressedMap.entrySet()) {
+            // Convert integer/rgb value back to bytes
+            int[] rgbComponents = decompressRGB(entry.getKey());
+            Byte[] rgb = new Byte[3];
+            for (int i = 0; i < 3; i++) {
+                    rgb[i] = compressToByte(rgbComponents[i]);
+            }
+            // Getting the unit space of the thingy to put in
+            for (int[] coord : entry.getValue()){
+                int idx = coord[0] +  width *  coord[1];
+                byteList.set(idx,rgb);
+                count += 1;
             }
         }
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
+            oos.writeShort(width); // Write the original width
+            oos.writeShort(height); // Write the original height
+            for (int i=0; i<fixedLength; i++){
+                for (int j=0; j<3; j++){
+                    oos.writeByte(byteList.get(i)[j]);
+                }
+            }        
+        }
+        // try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
+        //     oos.writeShort(pixels.length); // Write the original width
+        //     oos.writeShort(pixels[0].length); // Write the original height
+
+        //     // Loop thorugh
+        //     for (Map.Entry<Integer, ArrayList<int[]>> entry : compressedMap.entrySet()) {
+        //         // Write the rgb value as 3 bytes
+        //         int[] rgbComponents = decompressRGB(entry.getKey());
+        //         for (int i = 0; i < 3; i++) {
+        //             byte val = compressToByte(rgbComponents[i]);
+        //             // Write to thing
+        //             oos.writeByte(val);
+        //         }
+        //         oos.writeShort(entry.getValue().size()); // Write the size of the ArrayList
+        //         for (int[] coord : entry.getValue()) {
+        //             oos.writeShort(coord[0]); // Write the x coordinate
+        //             oos.writeShort(coord[1]); // Write the y coordinate
+        //         }
+        //     }
+        // }
     }
 
     public int[][][] Decompress(String inputFileName) throws IOException, ClassNotFoundException {
@@ -188,17 +216,24 @@ public class Utility {
         
         while (true) {
                 try {
-                    int[] rgb = {
-                        decompressFromByte(ois.readByte()),
-                        decompressFromByte(ois.readByte()),
-                        decompressFromByte(ois.readByte())
-                    }; // Read the RGB value
-                    short size = ois.readShort();  // Read the size of the ArrayList
-                    for (short i = 0; i < size; i++) {
-                        short x = ois.readShort();  // Read the x coordinate
-                        short y = ois.readShort();  // Read the y coordinate
-                        output[x][y] = rgb;
+                    for (int y=0; y<originalHeight; y++){
+                        for (int x=0; x<originalWidth; x++){
+                            output[x][y][0] = decompressFromByte(ois.readByte());
+                            output[x][y][1] = decompressFromByte(ois.readByte());
+                            output[x][y][2] = decompressFromByte(ois.readByte());
+                        }
                     }
+                    // int[] rgb = {
+                    //     decompressFromByte(ois.readByte()),
+                    //     decompressFromByte(ois.readByte()),
+                    //     decompressFromByte(ois.readByte())
+                    // }; // Read the RGB value
+                    // short size = ois.readShort();  // Read the size of the ArrayList
+                    // for (short i = 0; i < size; i++) {
+                    //     short x = ois.readShort();  // Read the x coordinate
+                    //     short y = ois.readShort();  // Read the y coordinate
+                    //     output[x][y] = rgb;
+                    // }
                 } catch (EOFException e) {
                     break;
                 }
