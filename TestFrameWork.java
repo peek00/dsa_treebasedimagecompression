@@ -235,8 +235,8 @@ public class TestFrameWork{
                     //calculate PSNR
                     double PSNR = PSNRCalculator.calculatePSNR(originalimage, decompressedimage);
                     psnrList.add(PSNR); 
-                    System.out.println("PSNR of :" + imageName + " is " + PSNR);   
-                    String psnrOutput = String.format("Mean Absolute Error of : %S is: %.2f",imageName ,PSNR); 
+                    System.out.println("Peak Signal-to-Noise Ratio of :" + imageName + " is " + PSNR);   
+                    String psnrOutput = String.format(" of : %S is: %.2f",imageName ,PSNR); 
                     System.out.println(psnrOutput);
                     testFrameWork.writeToResult(psnrOutput);
                     testFrameWork.writeToResult("================================================================================");
@@ -244,19 +244,19 @@ public class TestFrameWork{
             }
         }
         /* Process the summary Statistics */
-        testFrameWork.processAverageStatistics(compressionTimeList, "compression time");
-        testFrameWork.processAverageStatistics(differenceInFileSizeList, "difference in file size");
-        testFrameWork.processAverageStatistics(compressionRateList, "compression rate");
-        testFrameWork.processAverageStatistics(decompressionTimeList, "decompression");                
-        testFrameWork.processAverageStatistics(maeList, "MAE");
-        testFrameWork.processAverageStatistics(mseList, "MSE");
-        testFrameWork.processAverageStatistics(psnrList, "PSNR");
+        testFrameWork.processAverageStatistics(compressionTimeList, "compression time", "+ve", "lower");
+        testFrameWork.processAverageStatistics(differenceInFileSizeList, "difference in file size", "+ve", "lower");
+        testFrameWork.processAverageStatistics(compressionRateList, "compression rate", "+ve", "lower");
+        testFrameWork.processAverageStatistics(decompressionTimeList, "decompression", "+ve", "lower");                
+        testFrameWork.processAverageStatistics(maeList, "MAE", "+ve", "lower");
+        testFrameWork.processAverageStatistics(mseList, "MSE", "+ve", "lower");
+        testFrameWork.processAverageStatistics(psnrList, "PSNR", "+ve", "higher");
 
     }
 
-    public void processAverageStatistics(List<? extends Number> parameterList, String parameterName){
+    public void processAverageStatistics(List<? extends Number> parameterList, String parameterName, String expectedSign, String expectedTrend){
         double averageParameterValue = getAverage(parameterList); 
-        String parameterOutput = String.format("The average %s is: %.2f for test: %s", parameterName, averageParameterValue, testName); 
+        String parameterOutput = String.format("The average %s is: %.2f for test: %s (%s value expected,  the %s the better)", parameterName, averageParameterValue, testName, expectedSign, expectedTrend); 
         System.out.println(parameterOutput);
         writeToResult(parameterOutput);
     }
