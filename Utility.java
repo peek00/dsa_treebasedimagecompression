@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+// Store in a 
+// [ byte1, byte2, byte3, x,y,x,y,x,y]
 class NodeComparator implements Comparator<Node> {
     @Override
     public int compare(Node node1, Node node2) {
@@ -70,6 +73,17 @@ class Node {
 
 public class Utility {
 
+    public static byte compressToByte(int value){
+        if (value < 0 || value > 255) {
+            throw new IllegalArgumentException("Value is out of the valid range (0-255).");
+        }
+        return (byte) value;
+    }
+
+    public static int decompressFromByte(byte compressedValue){
+        return Byte.toUnsignedInt(compressedValue);
+    }
+
     public static int compressRGB(int pixels, int pixels2, int pixels3) {
         /**
          * Compresses 3 rgb value into one int.
@@ -106,10 +120,7 @@ public class Utility {
                 pixelMap.get(pixelValue).add(coord);
             }
         }
-        // Example at this point is 16777183 [(33, 16), (69, 52), (69, 53), (78, 29),
-        // (333, 45)]
 
-        // @Timo and Axel this is where yall will likely be continuing
         // Sort this hashmap into a sorted list by the size of the content and construct
         List<Map.Entry<Integer, ArrayList<int[]>>> entryList = new ArrayList<>(pixelMap.entrySet());
         List<Node> nodeList = new ArrayList<>();
@@ -117,11 +128,8 @@ public class Utility {
             nodeList.add(new Node(entry.getKey(), entry.getValue()));
         }
         java.util.Collections.sort(nodeList, Collections.reverseOrder(new NodeComparator()));
-        // Compressiong begins here
-        // Given a threshold n, I want to loop through the list and combine the
-        // arraySize of things that are too little
-        // To the previous one
-        int threshold = 1;
+  
+        int threshold = 25000;
         int prevRGB = -1;
 
         HashMap<Integer, ArrayList<int[]>> compressedMap = new HashMap<Integer, ArrayList<int[]>>();
@@ -139,18 +147,22 @@ public class Utility {
                 // Setting prev hashMap to NONE to be garbage collected
                 nodeList.get(i).coordinates = null;
             }
-
         }
 
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
-            System.out.println("Writing to file" + pixels.length + " " + pixels[0].length);
             oos.writeShort(pixels.length); // Write the original width
             oos.writeShort(pixels[0].length); // Write the original height
-            System.out.println("Written finished!");
+
             // Loop thorugh
             for (Map.Entry<Integer, ArrayList<int[]>> entry : compressedMap.entrySet()) {
-                oos.writeShort(entry.getKey()); // Write the RGB value
+                // Write the rgb value as 3 bytes
+                int[] rgbComponents = decompressRGB(entry.getKey());
+                for (int i = 0; i < 3; i++) {
+                    byte val = compressToByte(rgbComponents[i]);
+                    // Write to thing
+                    oos.writeByte(val);
+                }
                 oos.writeShort(entry.getValue().size()); // Write the size of the ArrayList
                 for (int[] coord : entry.getValue()) {
                     oos.writeShort(coord[0]); // Write the x coordinate
@@ -168,20 +180,24 @@ public class Utility {
         // an int [][][]
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
-    short originalWidth = ois.readShort();  // Read the original width
-    short originalHeight = ois.readShort();  // Read the original height
+        short originalWidth = ois.readShort();  // Read the original width
+        short originalHeight = ois.readShort();  // Read the original height
 
       // Read the size of the ArrayList
         int[][][] output = new int[originalWidth][originalHeight][3];
         
         while (true) {
                 try {
-                    short rgb = ois.readShort();  // Read the RGB value
+                    int[] rgb = {
+                        decompressFromByte(ois.readByte()),
+                        decompressFromByte(ois.readByte()),
+                        decompressFromByte(ois.readByte())
+                    }; // Read the RGB value
                     short size = ois.readShort();  // Read the size of the ArrayList
                     for (short i = 0; i < size; i++) {
                         short x = ois.readShort();  // Read the x coordinate
                         short y = ois.readShort();  // Read the y coordinate
-                        output[x][y] = decompressRGB(rgb);
+                        output[x][y] = rgb;
                     }
                 } catch (EOFException e) {
                     break;
