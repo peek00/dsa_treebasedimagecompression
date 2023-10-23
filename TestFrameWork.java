@@ -244,20 +244,26 @@ public class TestFrameWork{
             }
         }
         /* Process the summary Statistics */
-        testFrameWork.processAverageStatistics(compressionTimeList, "compression time", "+ve", "LOWER");
-        testFrameWork.processAverageStatistics(differenceInFileSizeList, "difference in file size", "+ve", "HIGHER");
-        testFrameWork.processAverageStatistics(compressionRateList, "compression rate", "+ve", "HIGHER");
-        testFrameWork.processAverageStatistics(decompressionTimeList, "decompression", "+ve", "LOWER");                
-        testFrameWork.processAverageStatistics(maeList, "MAE", "+ve", "LOWER");
-        testFrameWork.processAverageStatistics(mseList, "MSE", "+ve", "LOWER");
-        testFrameWork.processAverageStatistics(psnrList, "PSNR", "+ve", "HIGHER");
+        testFrameWork.processAverageStatistics(compressionTimeList, "compression time","milliseconds",  "+ve", "LOWER");
+        testFrameWork.processAverageStatistics(differenceInFileSizeList, "difference in file size", "byte", "+ve", "HIGHER");
+        testFrameWork.processAverageStatistics(compressionRateList, "compression rate", "", "+ve", "HIGHER");
+        testFrameWork.processAverageStatistics(decompressionTimeList, "decompression","milliseconds", "+ve", "LOWER");                
+        testFrameWork.processAverageStatistics(maeList, "MAE", "", "+ve", "LOWER");
+        testFrameWork.processAverageStatistics(mseList, "MSE", "", "+ve", "LOWER");
+        testFrameWork.processAverageStatistics(psnrList, "PSNR", "", "+ve", "HIGHER");
 
     }
 
-    public void processAverageStatistics(List<? extends Number> parameterList, String parameterName, String expectedSign, String expectedTrend){
+    public void processAverageStatistics(List<? extends Number> parameterList, String parameterName, String parameterUnit, String expectedSign, String expectedTrend){
         double averageParameterValue = getAverage(parameterList); 
-        String parameterOutput = String.format("The average %s is: %.2f for test: %s (%s value expected,  the %s the better)", parameterName, averageParameterValue, testName, expectedSign, expectedTrend); 
+        String parameterOutput = String.format("The average %s is: %.2f %s (%s value expected,  the %s the better)", parameterName, averageParameterValue, parameterUnit, expectedSign, expectedTrend); 
         System.out.println(parameterOutput);
         writeToResult(parameterOutput);
+    }
+
+    public double evaluateMatrix(){
+        double result = 0; 
+
+        return result; 
     }
 }
