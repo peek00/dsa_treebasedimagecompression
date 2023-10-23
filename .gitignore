@@ -39,3 +39,4 @@ java/build/**
 
 # log files
 *.log
+compressionSummaryData.csv
