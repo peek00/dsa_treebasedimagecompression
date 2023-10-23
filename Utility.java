@@ -2,7 +2,7 @@ import java.io.*;
 
 public class Utility {
 
-    private static final int THRESHOLD = 15;
+    private static final int THRESHOLD = 5;
 
     private QuadtreeNode buildQuadtree(int[][][] pixels, int x, int y, int size) {
         if (size == 1) {
