@@ -93,11 +93,12 @@ public class Utility {
         int maxSize = Math.max(pixels.length, pixels[0].length); // Handle non-square images
         QuadtreeNode root = buildQuadtree(pixels, 0, 0, maxSize);
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
-            oos.writeInt(maxSize);  // Write the image size
+            oos.writeInt(pixels.length);    // Save the width
+            oos.writeInt(pixels[0].length); // Save the height
+            oos.writeInt(maxSize);          // Write the max size (which is still needed to build the quadtree)
             writeQuadtree(oos, root);
         }
-    }
-    
+    }    
     
     private void writeQuadtree(ObjectOutputStream oos, QuadtreeNode node) throws IOException {
         if (node == null) {
@@ -128,10 +129,12 @@ public class Utility {
     
     public int[][][] Decompress(String inputFileName) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
+            int originalWidth = ois.readInt();
+            int originalHeight = ois.readInt();
             int size = ois.readInt();
             QuadtreeNode root = readQuadtree(ois, 0, 0, size);
-            int[][][] pixels = new int[size][size][3];
-            reconstructImage(pixels, root);
+            int[][][] pixels = new int[originalWidth][originalHeight][3];
+            reconstructImage(pixels, root, originalWidth, originalHeight);
     
             if(pixels.length == 0 || pixels[0].length == 0) {
                 throw new IllegalArgumentException("Decompression resulted in invalid pixel data.");
@@ -140,6 +143,7 @@ public class Utility {
             return pixels;
         }
     }
+    
     
     private QuadtreeNode readQuadtree(ObjectInputStream ois, int x, int y, int size) throws IOException {
         boolean exists = ois.readBoolean();
@@ -165,23 +169,24 @@ public class Utility {
         return node;
     }
     
-    private void reconstructImage(int[][][] pixels, QuadtreeNode node) {
+    private void reconstructImage(int[][][] pixels, QuadtreeNode node, int originalWidth, int originalHeight) {
         if (node == null) {
             return;  // Return immediately if the node is null
         }
         
         if (node.color != null) {
-            for (int i = node.x; i < node.x + node.size && i < pixels.length; i++) {
-                for (int j = node.y; j < node.y + node.size && j < pixels[i].length; j++) {
+            for (int i = node.x; i < node.x + node.size && i < originalWidth; i++) {
+                for (int j = node.y; j < node.y + node.size && j < originalHeight; j++) {
                     pixels[i][j] = node.color;
                 }
             }
         } else {
             for (int i = 0; i < 4; i++) {
-                reconstructImage(pixels, node.children[i]);
+                reconstructImage(pixels, node.children[i], originalWidth, originalHeight);
             }
         }
     }
+    
 
 }
 
