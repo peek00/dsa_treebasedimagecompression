@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 public class TestFrameWork{
     private String testResultFilePath;  
     private String testImageDirectory = "Original/"; // default value for the image directory 
-    private String testName = "Default Test Name";
+    private String testID =""; 
 
 
     /* Constructors */
@@ -26,6 +26,7 @@ public class TestFrameWork{
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
         this.testResultFilePath = "TestResult/TestResult_" + now.format(formatter) + ".log";
+        this.testID = "test_"+ now.format(formatter) ; 
 
         // Create the TestResult
         File file = new File(testResultFilePath);
@@ -37,10 +38,9 @@ public class TestFrameWork{
         }
     }
 
-    public TestFrameWork(String ImageDirectory, String testName){
+    public TestFrameWork(String ImageDirectory){
         this(); 
         this.testImageDirectory = ImageDirectory; // constructor chaining for specifying test image directories 
-        this.testName = testName; 
     }
 
     public void writeToResult(String input){
@@ -252,6 +252,16 @@ public class TestFrameWork{
         testFrameWork.processAverageStatistics(mseList, "MSE", "", "+ve", "LOWER");
         testFrameWork.processAverageStatistics(psnrList, "PSNR", "", "+ve", "HIGHER");
 
+        testFrameWork.recordDataToCSV(
+            testFrameWork.testID, 
+            compressionTimeList, 
+            differenceInFileSizeList, 
+            compressionRateList, 
+            decompressionTimeList, 
+            maeList, 
+            mseList, 
+            psnrList
+            ); 
     }
 
     public void processAverageStatistics(List<? extends Number> parameterList, String parameterName, String parameterUnit, String expectedSign, String expectedTrend){
@@ -261,9 +271,37 @@ public class TestFrameWork{
         writeToResult(parameterOutput);
     }
 
-    public double evaluateMatrix(){
-        double result = 0; 
+    public void recordDataToCSV(
+        String testID, 
+        ArrayList<Long> compressionTimeList, 
+        ArrayList<Long> differenceInFileSizeList, 
+        ArrayList<Double> compressionRateList, 
+        ArrayList<Long> decompressionTimeList, 
+        ArrayList<Double> maeList, 
+        ArrayList<Double> mseList, 
+        ArrayList<Double> psnrList
+        ){
+        
+        double averageCompressionTime = getAverage(compressionTimeList); 
+        double averageDifferenceInFileSize = getAverage(differenceInFileSizeList); 
+        double averageCompressionRate = getAverage(compressionRateList);
+        double averageDecompressionTime = getAverage(decompressionTimeList); 
+        double averageMAE = getAverage(maeList); 
+        double averageMSE = getAverage(mseList); 
+        double averagePSNR = getAverage(psnrList); 
 
-        return result; 
+        CSVHelper csvHelper = new CSVHelper(); 
+        csvHelper.createCSV();
+        csvHelper.appendToCSV(
+            testID, 
+            averageCompressionTime, 
+            averageDifferenceInFileSize,
+            averageCompressionRate,
+            averageDecompressionTime, 
+            averageMAE,  
+            averageMSE, 
+            averagePSNR
+        );
     }
+
 }
