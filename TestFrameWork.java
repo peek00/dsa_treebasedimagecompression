@@ -7,16 +7,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
 import javax.imageio.ImageIO;
 
 public class TestFrameWork{
     private String testResultFilePath;  
     private String testImageDirectory = "Original/"; // default value for the image directory 
     private String testID =""; 
+
 
 
     /* Constructors */
@@ -26,6 +23,7 @@ public class TestFrameWork{
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
         this.testResultFilePath = "TestResult/TestResult_" + now.format(formatter) + ".log";
+        // Initialize the testID for data analysis 
         this.testID = "test_"+ now.format(formatter) ; 
 
         // Create the TestResult
@@ -68,9 +66,7 @@ public class TestFrameWork{
         return sum / list.size();
     }
 
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException{
-
+    public void test(int threshold) throws IOException, ClassNotFoundException {
         //Create an instance of Utility
         Utility Utility = new Utility();
 
@@ -83,6 +79,8 @@ public class TestFrameWork{
         
         // List all files in the directory
         File directory = new File(ImageDirectory);
+        testFrameWork.writeToResult("testID: " + testFrameWork.testID);
+        testFrameWork.writeToResult("Threshold: " + threshold);
         testFrameWork.writeToResult("Image Directory: " + ImageDirectory);
 
         /* Stores varies parameters for overall performance analysis*/
@@ -132,7 +130,7 @@ public class TestFrameWork{
                     long compressStartTime = System.currentTimeMillis();
                     
                     //call compress function
-                    Utility.Compress(pixelData, compressed_file_name);
+                    Utility.Compress(pixelData, compressed_file_name, threshold);
                     
                     //end timer for compress and record the total time passed
                     long compressEndTime = System.currentTimeMillis();
@@ -252,6 +250,7 @@ public class TestFrameWork{
         testFrameWork.processAverageStatistics(mseList, "MSE", "", "+ve", "LOWER");
         testFrameWork.processAverageStatistics(psnrList, "PSNR", "", "+ve", "HIGHER");
 
+        // Write the summary statistics to CSV file 
         testFrameWork.recordDataToCSV(
             testFrameWork.testID, 
             compressionTimeList, 
@@ -260,15 +259,23 @@ public class TestFrameWork{
             decompressionTimeList, 
             maeList, 
             mseList, 
-            psnrList
+            psnrList,
+            threshold
             ); 
+
     }
 
-    public void processAverageStatistics(List<? extends Number> parameterList, String parameterName, String parameterUnit, String expectedSign, String expectedTrend){
+    public void processAverageStatistics(
+        List<? extends Number> parameterList, 
+        String parameterName, 
+        String parameterUnit, 
+        String expectedSign, 
+        String expectedTrend
+        ){
         double averageParameterValue = getAverage(parameterList); 
         String parameterOutput = String.format("The average %s is: %.2f %s (%s value expected,  the %s the better)", parameterName, averageParameterValue, parameterUnit, expectedSign, expectedTrend); 
         System.out.println(parameterOutput);
-        writeToResult(parameterOutput);
+        writeToResult(parameterOutput); // write to the result log 
     }
 
     public void recordDataToCSV(
@@ -279,7 +286,8 @@ public class TestFrameWork{
         ArrayList<Long> decompressionTimeList, 
         ArrayList<Double> maeList, 
         ArrayList<Double> mseList, 
-        ArrayList<Double> psnrList
+        ArrayList<Double> psnrList, 
+        int threshold
         ){
         
         double averageCompressionTime = getAverage(compressionTimeList); 
@@ -300,8 +308,20 @@ public class TestFrameWork{
             averageDecompressionTime, 
             averageMAE,  
             averageMSE, 
-            averagePSNR
+            averagePSNR,
+            threshold
         );
     }
 
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException{
+
+        TestFrameWork testFrameWork = new TestFrameWork(); 
+        
+        // test with different thresholds 
+        testFrameWork.test(500); 
+        testFrameWork.test(1000); 
+        testFrameWork.test(5000); 
+
+    }
 }
