@@ -21,7 +21,8 @@ public class Utility {
         if (colorDifferenceWithinThreshold(pixels, x, y, size, avgColor)) {
             node.color = avgColor;
         } else {
-            int newSize = size / 2;
+            // int newSize = size / 2;
+            int newSize = Math.round((float) size / 2);
             node.children = new QuadtreeNode[4];
             node.children[0] = buildQuadtree(pixels, x, y, newSize); // top-left quadrant
             node.children[1] = buildQuadtree(pixels, x + newSize, y, newSize); // top-right quadrant
@@ -159,7 +160,8 @@ public class Utility {
         if (isLeaf) {
             node.color = intToColor(ois.readInt());
         } else {
-            int newSize = size / 2;
+            // int newSize = size / 2;
+            int newSize = Math.round((float) size / 2);
             node.children = new QuadtreeNode[4];
             node.children[0] = readQuadtree(ois, x, y, newSize);
             node.children[1] = readQuadtree(ois, x + newSize, y, newSize);
