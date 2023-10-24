@@ -317,7 +317,7 @@ public class Utility {
         System.out.println("Image Width: " + width);
         System.out.println("Image Height: " + height);
 
-        Quadtree tree = new Quadtree(0,0,width,height,pixels,50);
+        Quadtree tree = new Quadtree(0,0,width,height,pixels,500);
         byte[] binaryData = Quadtree.encodeQuadTree(tree.root);
         try(FileOutputStream fos = new FileOutputStream(outputFileName)){
             fos.write(binaryData);
