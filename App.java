@@ -76,7 +76,8 @@ public class App {
                     long decompressStartTime = System.currentTimeMillis();
 
                     // call decompress function
-                    int [][][] newPixelData = Utility.Decompress(compressed_file_name);
+                    // Utility.Decompress(compressed_file_name);
+                    int[][][] newpixelData = Utility.Decompress(compressed_file_name);
                     
                     //end timer for decompress and record the total time passed
                     long decompressEndTime = System.currentTimeMillis();
@@ -85,7 +86,7 @@ public class App {
                     
 
                     //convert back to image for visualisation
-                    PixeltoImageConverter PixeltoImageConverter = new PixeltoImageConverter(newPixelData);
+                    PixeltoImageConverter PixeltoImageConverter = new PixeltoImageConverter(newpixelData);
                     PixeltoImageConverter.saveImage("Decompressed/" + imageName, "png");
 
                     //Get the two bufferedimages for calculations
