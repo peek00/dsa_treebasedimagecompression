@@ -47,25 +47,15 @@ class Node{
 
         if(width/2 <= 2 || height /2 <= 2){
             avgColor = averageColor(x, y, width, height, pixels);
-            // avgColor=new int[3];
-            // avgColor[0]=255;
-            // avgColor[1]=255;
-            // avgColor[2]=255;
             isLeaf = true;
         }
         else if(measureDetail(x,y,width,height,pixels)<threshold){
             avgColor = averageColor(x, y, width, height, pixels);
-            // avgColor=new int[3];
-            // avgColor[0]=255;
-            // avgColor[1]=255;
-            // avgColor[2]=255;
             isLeaf = true;
         }
         else{
             double width_divided = Math.round((double) width/2);
             double height_divided = Math.round((double) height/2);
-            // System.out.println("width_divided: "+width_divided+" height_divided: "+height_divided);
-            // System.out.println("_________________________________");
             int widthConverted = (int) width_divided;
             int heightConverted = (int) height_divided;
             children = new Node[4];
@@ -298,7 +288,9 @@ class Quadtree {
 }
 
 public class Utility {
-
+    // constant threshold for compression
+    final int threshold = 200;
+    
     public void Compress(int[][][] pixels, String outputFileName) throws IOException {
         // The following is a bad implementation that we have intentionally put in the function to make App.java run, you should 
         // write code to reimplement the function without changing any of the input parameters, and making sure the compressed file
@@ -317,7 +309,7 @@ public class Utility {
         System.out.println("Image Width: " + width);
         System.out.println("Image Height: " + height);
 
-        Quadtree tree = new Quadtree(0,0,width,height,pixels,500);
+        Quadtree tree = new Quadtree(0,0,width,height,pixels,threshold);
         byte[] binaryData = Quadtree.encodeQuadTree(tree.root);
         try(FileOutputStream fos = new FileOutputStream(outputFileName)){
             fos.write(binaryData);
