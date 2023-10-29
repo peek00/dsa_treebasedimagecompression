@@ -130,7 +130,7 @@ public class TestFrameWork{
                     long compressStartTime = System.currentTimeMillis();
                     
                     //call compress function
-                    Utility.Compress(pixelData, compressed_file_name);
+                    Utility.Compress(pixelData, compressed_file_name,threshold);
                     
                     //end timer for compress and record the total time passed
                     long compressEndTime = System.currentTimeMillis();
@@ -319,9 +319,11 @@ public class TestFrameWork{
         TestFrameWork testFrameWork = new TestFrameWork(); 
         
         // test with different thresholds 
+        testFrameWork.test(200); 
+        testFrameWork.test(300); 
+        testFrameWork.test(400); 
         testFrameWork.test(500); 
-        testFrameWork.test(1000); 
-        testFrameWork.test(5000); 
+        
 
     }
 }

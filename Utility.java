@@ -289,9 +289,8 @@ class Quadtree {
 
 public class Utility {
     // constant threshold for compression
-    final int threshold = 200;
     
-    public void Compress(int[][][] pixels, String outputFileName) throws IOException {
+    public void Compress(int[][][] pixels, String outputFileName,int threshold) throws IOException {
         // The following is a bad implementation that we have intentionally put in the function to make App.java run, you should 
         // write code to reimplement the function without changing any of the input parameters, and making sure the compressed file
         // gets written into outputFileName
