@@ -4,9 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -104,8 +102,8 @@ public class Utility {
         return rgbComponents;
     }
 
-    public void Compress(int[][][] pixels, String outputFileName) throws IOException {
-
+    public void Compress(int[][][] pixels, String outputFileName, int threshold) throws IOException {
+        // int threshold = 1000;
         // Creates a Hashmap of all the pixels and their coordinates
 
         HashMap<Integer, ArrayList<int[]>> pixelMap = new HashMap<Integer, ArrayList<int[]>>();
@@ -130,7 +128,7 @@ public class Utility {
         }
         java.util.Collections.sort(nodeList, Collections.reverseOrder(new NodeComparator()));
   
-        int threshold = 1000;
+        
         int prevRGB = -1;
 
         HashMap<Integer, ArrayList<int[]>> compressedMap = new HashMap<Integer, ArrayList<int[]>>();
