@@ -53,7 +53,7 @@ public class TestFrameWorkIndividual{
     }
     
 
-    public void test(int threshold) throws IOException, ClassNotFoundException {
+    public void test(int quadtreeThreshold, double allowedExceedingThreshold) throws IOException, ClassNotFoundException {
         //Create an instance of Utility
         Utility Utility = new Utility();
 
@@ -79,7 +79,8 @@ public class TestFrameWorkIndividual{
         File[] files = directory.listFiles();
 
         testFrameWorkIndividual.writeToResult("testID: " + testFrameWorkIndividual.testID);
-        testFrameWorkIndividual.writeToResult("Threshold: " + threshold);
+        testFrameWorkIndividual.writeToResult("quadtreeThreshold: " + quadtreeThreshold);
+        testFrameWorkIndividual.writeToResult("allowedExceedingThreshold: " + allowedExceedingThreshold);
         testFrameWorkIndividual.writeToResult("Image Directory: " + ImageDirectory);
 
 
@@ -112,9 +113,9 @@ public class TestFrameWorkIndividual{
                     // start compress timer
                     long compressStartTime = System.currentTimeMillis();
                     //call compress function
-                    Utility.Compress(pixelData, compressed_file_name, threshold);
+                    Utility.Compress(pixelData, compressed_file_name, quadtreeThreshold, allowedExceedingThreshold);
                     /**
-                     * Please note that the threshold has been exposed here 
+                     * Please note that the 2 threshold values has to be exposed here 
                      */
                     //end timer for compress and record the total time passed
                     long compressEndTime = System.currentTimeMillis();
@@ -195,8 +196,8 @@ public class TestFrameWorkIndividual{
                     testFrameWorkIndividual.writeToResult(psnrOutput);
 
 
-                    // initialize a record row with 12 slots (0-11)
-                    String[] recordRow = new String[12]; 
+                    // initialize a record row with 13 slots (0-11)
+                    String[] recordRow = new String[13]; 
                     // 0_Test_ID
                     recordRow[0] = testFrameWorkIndividual.testID; // this instance's testID 
                     // 1_File_Name
@@ -216,8 +217,10 @@ public class TestFrameWorkIndividual{
                     recordRow[8] = Double.toString(MAE); 
                     recordRow[9] = Double.toString(MSE); 
                     recordRow[10] = Double.toString(PSNR); 
-                    // 11_Threshold
-                    recordRow[11] = Integer.toString(threshold); 
+                    // 11_QuadtreeThreshold
+                    recordRow[11] = Integer.toString(quadtreeThreshold); 
+                    // 12_AllowedExceedingThreshold
+                    recordRow[12] = Double.toString(allowedExceedingThreshold); 
 
 
                     // Add the row to the data table 
@@ -241,9 +244,12 @@ public class TestFrameWorkIndividual{
         TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
         
         // test with different thresholds 
-        testFrameWorkIndividual.test(500); 
-        testFrameWorkIndividual.test(1000); 
-        testFrameWorkIndividual.test(5000); 
+        testFrameWorkIndividual.test(500, 0.1); 
+        testFrameWorkIndividual.test(1000, 0.1); 
+        testFrameWorkIndividual.test(50000, 0.1); 
 
+        testFrameWorkIndividual.test(500, 0.01); 
+        testFrameWorkIndividual.test(1000, 0.01); 
+        testFrameWorkIndividual.test(50000, 0.01); 
     }
 }
