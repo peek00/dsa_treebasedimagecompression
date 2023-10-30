@@ -129,7 +129,7 @@ public class TestFrameWork{
                     long compressStartTime = System.currentTimeMillis();
                     
                     //call compress function
-                    Utility.Compress(pixelData, compressed_file_name, threshold);
+                    Utility.Compress(pixelData, compressed_file_name);
                     
                     //end timer for compress and record the total time passed
                     long compressEndTime = System.currentTimeMillis();
