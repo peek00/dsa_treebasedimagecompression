@@ -2,8 +2,17 @@ import java.io.*;
 
 public class Utility {
 
-    private static final int QUADTREE_THRESHOLD = 100;
-    private static final double ALLOWED_EXCEEDING_THRESHOLD_FACTOR = 0.001; 
+    private int QUADTREE_THRESHOLD = 100;
+    private double ALLOWED_EXCEEDING_THRESHOLD_FACTOR = 0.001; 
+
+    public void setQuadTreeThreshold(int inputThreshold){
+        this.QUADTREE_THRESHOLD = inputThreshold; 
+    }
+
+    public void setAllowedExceedingThresholdFactor(double inputFactor){
+        this.ALLOWED_EXCEEDING_THRESHOLD_FACTOR = inputFactor; 
+    }
+
 
     private QuadtreeNode buildQuadtree(int[][][] pixels, int x, int y, int size) {
         if (x < 0 || y < 0 || x >= pixels.length || y >= pixels[0].length || size <= 0) {

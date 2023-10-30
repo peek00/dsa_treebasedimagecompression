@@ -55,7 +55,11 @@ public class TestFrameWorkIndividual{
 
     public void test(int quadtreeThreshold, double allowedExceedingThresholdFactor) throws IOException, ClassNotFoundException {
         //Create an instance of Utility
-        Utility Utility = new Utility();
+        Utility utilityObject = new Utility();
+
+        // Update the Test Parameters 
+        utilityObject.setQuadTreeThreshold(quadtreeThreshold);
+        utilityObject.setAllowedExceedingThresholdFactor(allowedExceedingThresholdFactor);
 
         // Create an instance of TestFramework 
         TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
@@ -113,7 +117,7 @@ public class TestFrameWorkIndividual{
                     // start compress timer
                     long compressStartTime = System.currentTimeMillis();
                     //call compress function
-                    Utility.Compress(pixelData, compressed_file_name, quadtreeThreshold, allowedExceedingThresholdFactor);
+                    utilityObject.Compress(pixelData, compressed_file_name);
                     /**
                      * Please note that the threshold has been exposed here 
                      */
@@ -158,7 +162,7 @@ public class TestFrameWorkIndividual{
                     long decompressStartTime = System.currentTimeMillis();
 
                     // call decompress function
-                    int[][][] newPixelData = Utility.Decompress(compressed_file_name);
+                    int[][][] newPixelData = utilityObject.Decompress(compressed_file_name);
                     
                     //end timer for decompress and record the total time passed
                     long decompressEndTime = System.currentTimeMillis();
