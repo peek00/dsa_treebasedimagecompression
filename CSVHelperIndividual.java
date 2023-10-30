@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CSVHelperIndividual {
-    private static final String CSV_FILE_NAME = "IndividualCompressionData.csv";
-    private static final String CSV_HEADER = "SN,Test ID,File Name,Original File Size,Compressed Bin Size,File Size Difference,Compression Rate,Compression Time,Decompression Time,MAE,MSE,PSNR,Threshold\n";
+    private String csvFileName; 
+    private static final String CSV_HEADER = "SN,Test ID,File Name,Original File Size,Compressed Bin Size,File Size Difference,Compression Rate,Compression Time,Decompression Time,MAE,MSE,PSNR,QuadtreeThreshold,AllowedExceedingThreshold\n";
 
-    public CSVHelperIndividual(){
-
+    public CSVHelperIndividual(String csvFilename){
+        this.csvFileName = csvFilename; 
     }
 
     public void createCSV() {
-        File file = new File(CSV_FILE_NAME);
+        File file = new File(csvFileName);
 
         // If file doesn't exist, create it and write the header
         if (!file.exists()) {
@@ -27,7 +27,7 @@ public class CSVHelperIndividual {
     public void appendToCSV(ArrayList<String[]> dataTable){
         int sn = 0; // serial number 
         // data table: An ArrayList of String arrays, with 12 elements in each array 
-        try (FileWriter fw = new FileWriter(CSV_FILE_NAME, true)) { // true for append mode
+        try (FileWriter fw = new FileWriter(csvFileName, true)) { // true for append mode
             // Loop through each row in the data table
             for (String[] row : dataTable) {
                 sn ++; 

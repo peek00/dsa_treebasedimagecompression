@@ -22,7 +22,7 @@ public class TestFrameWorkIndividual{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
         this.testResultFilePath = "TestResult/TestResult_" + now.format(formatter) + ".log";
         // Initialize the testID for data analysis 
-        this.testID = "test_"+ now.format(formatter) ; 
+        this.testID = "test_"+ now.format(formatter); 
 
         // Create the TestResult
         File file = new File(testResultFilePath);
@@ -115,7 +115,7 @@ public class TestFrameWorkIndividual{
                     //call compress function
                     Utility.Compress(pixelData, compressed_file_name, quadtreeThreshold, allowedExceedingThreshold);
                     /**
-                     * Please note that the 2 threshold values has to be exposed here 
+                     * Please note that the threshold has been exposed here 
                      */
                     //end timer for compress and record the total time passed
                     long compressEndTime = System.currentTimeMillis();
@@ -199,7 +199,7 @@ public class TestFrameWorkIndividual{
                     // initialize a record row with 13 slots (0-11)
                     String[] recordRow = new String[13]; 
                     // 0_Test_ID
-                    recordRow[0] = testFrameWorkIndividual.testID; // this instance's testID 
+                    recordRow[0] = testFrameWorkIndividual.testID; // this test instance's testID 
                     // 1_File_Name
                     recordRow[1] = imageName; 
                     // 2_Original_Size
@@ -222,7 +222,6 @@ public class TestFrameWorkIndividual{
                     // 12_AllowedExceedingThreshold
                     recordRow[12] = Double.toString(allowedExceedingThreshold); 
 
-
                     // Add the row to the data table 
                     compressionDataTable.add(recordRow); 
                     
@@ -233,7 +232,7 @@ public class TestFrameWorkIndividual{
         }
 
         testFrameWorkIndividual.writeToResult("Exporting data to IndividualCompressionData.csv");
-        CSVHelperIndividual csvHelperIndividual = new CSVHelperIndividual(); 
+        CSVHelperIndividual csvHelperIndividual = new CSVHelperIndividual(String.format("IndividualCompressionData_since_%s.csv", testID)); // first
         csvHelperIndividual.createCSV();
         csvHelperIndividual.appendToCSV(compressionDataTable);
 }
@@ -243,13 +242,22 @@ public class TestFrameWorkIndividual{
 
         TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
         
-        // test with different thresholds 
-        testFrameWorkIndividual.test(500, 0.1); 
-        testFrameWorkIndividual.test(1000, 0.1); 
-        testFrameWorkIndividual.test(50000, 0.1); 
+        // define the min, max and steps for both thresholds 
+        int minQuadtreeThreshold = 50;
+        int maxQuadtreeThreshold = 100;
+        int quadtreeThresholdStep = 10; 
+        // 5 test values 
 
-        testFrameWorkIndividual.test(500, 0.01); 
-        testFrameWorkIndividual.test(1000, 0.01); 
-        testFrameWorkIndividual.test(50000, 0.01); 
+        double minAllowedExceedingThreshold = 0.0010; 
+        double maxAllowedExceedingThreshold = 0.1000; 
+        double allowedExceedingThresholdStep =0.0100;
+        // 10 test values 
+
+        for (int qt = minQuadtreeThreshold; qt <= maxQuadtreeThreshold; qt = qt+quadtreeThresholdStep){
+            for (double aet = minAllowedExceedingThreshold; aet <= maxAllowedExceedingThreshold; aet = aet+allowedExceedingThresholdStep){
+                testFrameWorkIndividual.test(qt, aet); 
+            }
+        }
+
     }
 }
