@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 
 public class App {
     public static void main(String[] args) throws IOException, ClassNotFoundException{
+        int avgBefore = 0;
+        int avgAfter = 0;
 
         //Create an instance of Utility
         Utility Utility = new Utility();
@@ -105,10 +107,16 @@ public class App {
                     double PSNR = PSNRCalculator.calculatePSNR(originalimage, decompressedimage);
                     System.out.println("PSNR of :" + imageName + " is " + PSNR);   
 
+                    avgBefore += Utility.uniquePixelCountBefore;
+                    avgAfter += Utility.uniquePixelCountAfter;
                 }
             }
         }
-
+        System.out.println("================================================");
+        int avgUniquePixelCountBefore=avgBefore/files.length;
+        int avgUniquePixelCountAfter= avgAfter/files.length;
+        System.out.println("avgUniquePixelCountBefore: " + avgUniquePixelCountBefore + " , avgUniquePixelCountAfter: " + avgUniquePixelCountAfter);
+        System.out.println("Percentage of unique pixel count reduced: " + ( (double) avgUniquePixelCountBefore - avgUniquePixelCountAfter)/ avgUniquePixelCountBefore * 100.0);
     }
 }
 

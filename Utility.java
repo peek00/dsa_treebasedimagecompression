@@ -1,8 +1,15 @@
 import java.io.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Utility {
 
     private static final int THRESHOLD = 50;
+    public int uniquePixelCountBefore = 0;
+    public int uniquePixelCountAfter = 0;
+
 
     private QuadtreeNode buildQuadtree(int[][][] pixels, int x, int y, int size) {
         if (x < 0 || y < 0 || x >= pixels.length || y >= pixels[0].length || size <= 0) {
@@ -66,7 +73,7 @@ public class Utility {
         int maxY = Math.min(y + size, pixels[0].length);
     
         int countExceedingThreshold = 0;
-        int allowedExceedingThreshold = (int) (0.1 * size * size); // Allow up to 10% of the pixels to exceed the threshold
+        int allowedExceedingThreshold = (int) (0.001 * size * size); // Allow up to 10% of the pixels to exceed the threshold
         
         for (int i = x; i < maxX; i++) {
             for (int j = y; j < maxY; j++) {
@@ -90,6 +97,9 @@ public class Utility {
         if(pixels == null || pixels.length == 0 || pixels[0].length == 0) {
             throw new IllegalArgumentException("Invalid pixel data provided.");
         }
+
+        //TIMOTHY'S CODE TO COUNT BEFORE TREE DONE
+        uniquePixelCountBefore = uniquePixelCount(pixels);
     
         int maxSize = Math.max(pixels.length, pixels[0].length); // Handle non-square images
         QuadtreeNode root = buildQuadtree(pixels, 0, 0, maxSize);
@@ -136,6 +146,10 @@ public class Utility {
             QuadtreeNode root = readQuadtree(ois, 0, 0, size);
             int[][][] pixels = new int[originalWidth][originalHeight][3];
             reconstructImage(pixels, root, originalWidth, originalHeight);
+
+
+            //TIMOTHY'S CODE TO COUNT AFTER TREE DONE
+            uniquePixelCountAfter = uniquePixelCount(pixels);
     
             if(pixels.length == 0 || pixels[0].length == 0) {
                 throw new IllegalArgumentException("Decompression resulted in invalid pixel data.");
@@ -188,30 +202,29 @@ public class Utility {
             }
         }
     }
+
+
+    //TIMOTHY'S CODE TO COUNT UNIQUE PIXEL COUNTS
+    private int uniquePixelCount(int[][][] pixels) {
+        int _uniquePixelCount = 0;
+        Set<String> uniqueColors = new HashSet<>();
+
+        for (int i = 0; i < pixels.length; i++) {
+            for (int j = 0; j < pixels[i].length; j++) {
+                int r = pixels[i][j][0];
+                int g = pixels[i][j][1];
+                int b = pixels[i][j][2];
+                String colorKey = r + "," + g + "," + b;
+                uniqueColors.add(colorKey);
+            }
+        }
+        System.out.println("Colors: ");
+        for (String c : uniqueColors) {
+            _uniquePixelCount++;
+        }
+        System.out.print(uniquePixelCountBefore+"\n");
+        return _uniquePixelCount;
+    }
     
 
 }
-
-// public void Compress(int[][][] pixels, String outputFileName) throws IOException {
-//     // The following is a bad implementation that we have intentionally put in the function to make App.java run, you should 
-//     // write code to reimplement the function without changing any of the input parameters, and making sure the compressed file
-//     // gets written into outputFileName
-//     try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) { 
-//         oos.writeObject(pixels); 
-//     }
-// }
-
-// public int[][][] Decompress(String inputFileName) throws IOException, ClassNotFoundException {
-//     // The following is a bad implementation that we have intentionally put in the function to make App.java run, you should 
-//     // write code to reimplement the function without changing any of the input parameters, and making sure that it returns
-//     // an int [][][]
-//     try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
-//         Object object = ois.readObject();
-
-//         if (object instanceof int[][][]) {
-//             return (int[][][]) object;
-//         } else {
-//             throw new IOException("Invalid object type in the input file");
-//         }
-//     }
-// }
