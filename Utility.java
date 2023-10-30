@@ -1,328 +1,193 @@
 import java.io.*;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
-class Node{
-	int x, y;
-    int width, height;
-    int[] avgColor;
-    /*
-        children[0] = upper left quadrant or north-west
-        children[1] = upper right quadrant or north-east
-        children[2] = lower left quadrant or south-west
-        children[3] = lower right quadrant or south-east
-    */ 
-    boolean isLeaf = false;
-    Node[] children; 
-
-    //To decompress leaf nodes
-    Node(int x, int y, int width, int height, int[] color) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.avgColor = color;
-    }
-
-    Node(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.isLeaf = false;
-    }
-
-
-	Node(int x, int y, int width, int height, int[][][] pixels, float threshold) {
-		this.x = x; 
-		this.y = y;
-        
-
-        this.width=width;
-        this.height=height;
-        
-
-        if(width/2 <= 2 || height /2 <= 2){
-            // avgColor = averageColor(x, y, width, height, pixels);
-            avgColor=new int[3];
-            avgColor[0]=255;
-            avgColor[1]=255;
-            avgColor[2]=255;
-            isLeaf = true;
-        }
-        else if(measureDetail(x,y,width,height,pixels)<threshold){
-            // avgColor = averageColor(x, y, width, height, pixels);
-            avgColor=new int[3];
-            avgColor[0]=255;
-            avgColor[1]=255;
-            avgColor[2]=255;
-            isLeaf = true;
-        }
-        else{
-            double width_divided = Math.round((double) width/2);
-            double height_divided = Math.round((double) height/2);
-            System.out.println("width_divided: "+width_divided+" height_divided: "+height_divided);
-            System.out.println("_________________________________");
-            int widthConverted = (int) width_divided;
-            int heightConverted = (int) height_divided;
-            children = new Node[4];
-            // upper left quadrant or north-west
-            children[0] = new Node(x,y,widthConverted,heightConverted,pixels,threshold);
-            // upper right quadrant or north-east
-            children[1] = new Node(x+widthConverted,y,widthConverted,heightConverted,pixels,threshold);
-            // lower left quadrant or south-west
-            children[2] = new Node(x,y+heightConverted,width/2,height-heightConverted,pixels,threshold);
-            // lower right quadrant or south-east
-            children[3] = new Node(x+widthConverted,y+heightConverted,width-widthConverted,height-heightConverted,pixels,threshold);
-        }
-	}
-
-    public int[] averageColor(int x, int y, int width, int height, int[][][] pixels){
-        System.out.println("x: "+x+" y: "+y+" width: "+width+" height: "+height);
-        int red = 0;
-        int green = 0;
-        int blue = 0;
-        for(int i = x; i < x + width; i++){
-            for(int j = y; j < y + height; j++){
-                red += pixels[i][j][0];
-                green += pixels[i][j][1];
-                blue += pixels[i][j][2];
-            }
-        }
-        //number of pixels evaluated
-        int area = width * height;
-        int[] average = new int[3];
-        average[0] = red/area;
-        average[1] = green/area;
-        average[2] = blue/area;
-        return average;        
-    }
-
-    public int[] maxColor(int x, int y, int width, int height, int[][][] pixels){
-        int[] average = new int[3];
-        int maxPixel = pixels[x][y][0]+pixels[x][y][1]+pixels[x][y][2];
-        for(int i = x; i < x + width; i++){
-            for(int j = y; j < y + height; j++){
-                int maxColor = pixels[i][j][0]+pixels[i][j][1]+pixels[i][j][2];
-                if(maxPixel<maxColor){
-                    maxPixel = maxColor;
-                    average[0] = pixels[i][j][0];
-                    average[1] = pixels[i][j][1];
-                    average[2] = pixels[i][j][2];
-                }
-            }
-        }
-        return average;        
-    }
-
-    /* Measures the amount of detail of a rectangular grid*/
-    public int measureDetail(int x, int y, int width, int height, int[][][] pixels){
-        int[] average = averageColor(x, y, width, height, pixels);
-        int red = average[0];
-        int green = average[1];
-        int blue = average[2];
-
-        long colorSum = 0;
-        /*
-         * Iterate through the pixels in the region and calculate the squared
-         * difference between the average color and the color of each pixel.
-         * Accumulate the squared differences in the variable colorSum.
-         */
-        for(int i = x; i < x + width; i++){
-            for(int j = y; j < y + height; j++){
-                int pixelRed = pixels[i][j][0];
-                int pixelGreen = pixels[i][j][1];
-                int pixelBlue = pixels[i][j][2];
-                
-                // Calculate squared differences for each channel
-                int diffRed = pixelRed - red;
-                int diffGreen = pixelGreen - green;
-                int diffBlue = pixelBlue - blue;
-
-            // Accumulate the squared differences for each channel
-                
-                colorSum += (long)(diffRed * diffRed + diffGreen * diffGreen + diffBlue * diffBlue);
-            }
-        }
-
-    // Calculate the standard deviation for each channel
-        
-        double stdDeviation = Math.sqrt((double) colorSum / (width * height));
-
-        // Weight the standard deviation by the number of pixels in the region
-        double weightedDetail = stdDeviation * width * height;
-        return (int) weightedDetail;
-        }
-    
-
-    public Node getChild(Node e, int i){
-        if(e.children == null){
-            return null;
-        }
-        return e.children[i];
-    }
-
-   
-}
-
-class Quadtree {
-    Node root;
-
-    public Quadtree(int x, int y, int width, int height, int[][][] pixels,int threshold){
-        //Base case in node class
-        root = new Node(0,0,width,height,pixels,threshold);                
-    }
-
-    public void printTree(Node node) {
-        // Print information about the current node
-        System.out.println("Node at (" + node.x + ", " + node.y + ") with dimensions (" + node.width + " x " + node.height + ")");
-
-        // If the node has children, recursively print them
-        if (node.children != null) {
-            for (Node child : node.children) {
-                printTree(child);
-            }
-        }
-    }
-
-    public static byte[] encodeQuadTree(Node node) {
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        encodeNodeRecursive(node, byteStream);
-        return byteStream.toByteArray();
-    }
-
-    private static void encodeNodeRecursive(Node node, ByteArrayOutputStream byteStream) {
-        try {
-            byteStream.write(node.isLeaf ? 1 : 0);
-            byteStream.write(ByteBuffer.allocate(4).putInt(node.x).array());
-            byteStream.write(ByteBuffer.allocate(4).putInt(node.y).array());
-            byteStream.write(ByteBuffer.allocate(4).putInt(node.width).array());
-            byteStream.write(ByteBuffer.allocate(4).putInt(node.height).array());
-            if (node.isLeaf) {
-                for (int color : node.avgColor) {
-                    byteStream.write(color);
-                }
-            } else {
-                for (Node child : node.children) {
-                    encodeNodeRecursive(child, byteStream);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-      public static Node decodeQuadTree(String fileName) {
-        try (FileInputStream fileInputStream = new FileInputStream(fileName)) {
-            // Read the binary data from the file
-            byte[] binaryData = new byte[fileInputStream.available()];
-            fileInputStream.read(binaryData);
-
-            // Initialize a ByteArrayInputStream for decoding
-            ByteArrayInputStream byteStream = new ByteArrayInputStream(binaryData);
-
-            // Decode the quadtree recursively
-            return decodeNodeRecursive(byteStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    // Recursively decode a node and its children
-    private static Node decodeNodeRecursive(ByteArrayInputStream byteStream) {
-        try {
-            int isLeaf = byteStream.read();
-            int x = ByteBuffer.wrap(byteStream.readNBytes(4)).getInt();
-            int y = ByteBuffer.wrap(byteStream.readNBytes(4)).getInt();
-            int width = ByteBuffer.wrap(byteStream.readNBytes(4)).getInt();
-            int height = ByteBuffer.wrap(byteStream.readNBytes(4)).getInt();
-
-            Node node;
-            if (isLeaf == 1) {
-                int[] avgColor = new int[3];
-                avgColor[0] = byteStream.read();
-                avgColor[1] = byteStream.read();
-                avgColor[2] = byteStream.read();
-                node = new Node(x, y, width, height, avgColor);
-            } else {
-                node = new Node(x, y, width, height);
-                node.children = new Node[4];
-                for (int i = 0; i < 4; i++) {
-                    node.children[i] = decodeNodeRecursive(byteStream);
-                }
-            }
-
-            return node;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-}
 
 public class Utility {
 
-    public void Compress(int[][][] pixels, String outputFileName) throws IOException {
-        // The following is a bad implementation that we have intentionally put in the function to make App.java run, you should 
-        // write code to reimplement the function without changing any of the input parameters, and making sure the compressed file
-        // gets written into outputFileName
-        String fileName = outputFileName.substring(outputFileName.lastIndexOf('/') + 1, outputFileName.lastIndexOf('.'));
-        System.out.println(fileName);
-        File file = new File("Original/" +fileName+".png");
-        if (file.exists()) {
-            System.out.println("The file exists.");
-        } else {
-            System.out.println("The file does not exist.");
+    private static final int THRESHOLD = 100;
+
+    private QuadtreeNode buildQuadtree(int[][][] pixels, int x, int y, int size) {
+        if (x < 0 || y < 0 || x >= pixels.length || y >= pixels[0].length || size <= 0) {
+            return null;
         }
-        BufferedImage image = ImageIO.read(file);
-        int width = image.getWidth();
-        int height = image.getHeight();
-        System.out.println("Image Width: " + width);
-        System.out.println("Image Height: " + height);
-
-        Quadtree tree = new Quadtree(0,0,width,height,pixels,10000);
-        byte[] binaryData = Quadtree.encodeQuadTree(tree.root);
-        try(FileOutputStream fos = new FileOutputStream(outputFileName)){
-            fos.write(binaryData);
-        }catch(IOException e){
-            e.printStackTrace();
-        }        
-    }
-
-    public int[][][] Decompress(String inputFileName) throws IOException, ClassNotFoundException {
-        Node root = Quadtree.decodeQuadTree(inputFileName);
         
-        int[][][] pixels = new int[root.width][root.height][3];
-        decompressTree(root, pixels);
-        return pixels;
-        
-    }
-    // }
+        QuadtreeNode node = new QuadtreeNode(x, y, size);
     
-    // Add a recursive method to decompress the tree
-    private void decompressTree(Node node, int[][][] pixels) {
-        if (node.children == null) {
-            for (int i = node.x; i < node.x + node.width; i++) {
-                for (int j = node.y; j < node.y + node.height; j++) {
-                   
-                    pixels[i][j][0] = node.avgColor[0];
-                    pixels[i][j][1] = node.avgColor[1];
-                    pixels[i][j][2] = node.avgColor[2];
+        // Base case: if size is 1, then create a leaf node with the color of that pixel.
+        if (size == 1) {
+            node.color = pixels[x][y];
+            return node;
+        }
+        
+        int[] avgColor = calculateAverageColor(pixels, x, y, size);
+        if (colorDifferenceWithinThreshold(pixels, x, y, size, avgColor)) {
+            node.color = avgColor;
+        } else {
+            // int newSize = size / 2;
+            int newSize = Math.round((float) size / 2);
+            node.children = new QuadtreeNode[4];
+            node.children[0] = buildQuadtree(pixels, x, y, newSize); // top-left quadrant
+            node.children[1] = buildQuadtree(pixels, x + newSize, y, newSize); // top-right quadrant
+            node.children[2] = buildQuadtree(pixels, x, y + newSize, newSize); // bottom-left quadrant
+            node.children[3] = buildQuadtree(pixels, x + newSize, y + newSize, newSize); // bottom-right quadrant
+        }
+    
+        return node;
+    }
+
+    private int[] calculateAverageColor(int[][][] pixels, int x, int y, int size) {
+        long sumR = 0, sumG = 0, sumB = 0;
+        int maxX = Math.min(x + size, pixels.length);
+        int maxY = Math.min(y + size, pixels[0].length);
+    
+        for (int i = x; i < maxX; i++) {
+            for (int j = y; j < maxY; j++) {
+                sumR += pixels[i][j][0];
+                sumG += pixels[i][j][1];
+                sumB += pixels[i][j][2];
+            }
+        }
+    
+        int totalPixels = (maxX - x) * (maxY - y);
+        if (totalPixels == 0) {
+            return new int[]{0, 0, 0}; // Return black if no pixels to average
+        }
+        return new int[]{(int) (sumR / totalPixels), (int) (sumG / totalPixels), (int) (sumB / totalPixels)};        
+    }
+
+    private boolean colorDifferenceWithinThreshold(int[][][] pixels, int x, int y, int size, int[] averageColor) {
+        if (x < 0 || y < 0 || x >= pixels.length || y >= pixels[0].length) {
+            return false;
+        }
+        
+        int red = averageColor[0];
+        int green = averageColor[1];
+        int blue = averageColor[2];
+        
+        int maxX = Math.min(x + size, pixels.length);
+        int maxY = Math.min(y + size, pixels[0].length);
+    
+        int countExceedingThreshold = 0;
+        int allowedExceedingThreshold = (int) (0.0001 * size * size); // Allow up to 10% of the pixels to exceed the threshold
+        
+        for (int i = x; i < maxX; i++) {
+            for (int j = y; j < maxY; j++) {
+                int diffRed = Math.abs(pixels[i][j][0] - red);
+                int diffGreen = Math.abs(pixels[i][j][1] - green);
+                int diffBlue = Math.abs(pixels[i][j][2] - blue);
+                
+                if (diffRed > THRESHOLD || diffGreen > THRESHOLD || diffBlue > THRESHOLD) {
+                    countExceedingThreshold++;
+                    if (countExceedingThreshold > allowedExceedingThreshold) {
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+
+    public void Compress(int[][][] pixels, String outputFileName) throws IOException {
+        if(pixels == null || pixels.length == 0 || pixels[0].length == 0) {
+            throw new IllegalArgumentException("Invalid pixel data provided.");
+        }
+    
+        int maxSize = Math.max(pixels.length, pixels[0].length); // Handle non-square images
+        QuadtreeNode root = buildQuadtree(pixels, 0, 0, maxSize);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
+            oos.writeInt(pixels.length);    // Save the width
+            oos.writeInt(pixels[0].length); // Save the height
+            oos.writeInt(maxSize);          // Write the max size (which is still needed to build the quadtree)
+            writeQuadtree(oos, root);
+        }
+    }    
+    
+    private void writeQuadtree(ObjectOutputStream oos, QuadtreeNode node) throws IOException {
+        if (node == null) {
+            oos.writeBoolean(false);
+            return;
+        }
+        
+        oos.writeBoolean(true);
+
+        if (node.color != null) {
+            oos.writeBoolean(true);
+            oos.writeInt(colorToInt(node.color)); // Using our optimized color representation
+        } else {
+            oos.writeBoolean(false);
+            for (int i = 0; i < 4; i++) {
+                writeQuadtree(oos, node.children[i]);
+            }
+        }
+    }
+    
+    private int colorToInt(int[] color) {
+        return (color[0] << 16) | (color[1] << 8) | color[2];
+    }
+
+    private int[] intToColor(int rgb) {
+        return new int[]{(rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF};
+    }
+    
+    public int[][][] Decompress(String inputFileName) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
+            int originalWidth = ois.readInt();
+            int originalHeight = ois.readInt();
+            int size = ois.readInt();
+            QuadtreeNode root = readQuadtree(ois, 0, 0, size);
+            int[][][] pixels = new int[originalWidth][originalHeight][3];
+            reconstructImage(pixels, root, originalWidth, originalHeight);
+    
+            if(pixels.length == 0 || pixels[0].length == 0) {
+                throw new IllegalArgumentException("Decompression resulted in invalid pixel data.");
+            }
+    
+            return pixels;
+        }
+    }
+    
+    
+    private QuadtreeNode readQuadtree(ObjectInputStream ois, int x, int y, int size) throws IOException {
+        boolean exists = ois.readBoolean();
+        
+        if (!exists) {
+            return null;
+        }
+        
+        boolean isLeaf = ois.readBoolean();
+    
+        QuadtreeNode node = new QuadtreeNode(x, y, size);
+        
+        if (isLeaf) {
+            node.color = intToColor(ois.readInt());
+        } else {
+            // int newSize = size / 2;
+            int newSize = Math.round((float) size / 2);
+            node.children = new QuadtreeNode[4];
+            node.children[0] = readQuadtree(ois, x, y, newSize);
+            node.children[1] = readQuadtree(ois, x + newSize, y, newSize);
+            node.children[2] = readQuadtree(ois, x, y + newSize, newSize);
+            node.children[3] = readQuadtree(ois, x + newSize, y + newSize, newSize);
+        }
+        return node;
+    }
+    
+    private void reconstructImage(int[][][] pixels, QuadtreeNode node, int originalWidth, int originalHeight) {
+        if (node == null) {
+            return;  // Return immediately if the node is null
+        }
+        
+        if (node.color != null) {
+            for (int i = node.x; i < node.x + node.size && i < originalWidth; i++) {
+                for (int j = node.y; j < node.y + node.size && j < originalHeight; j++) {
+                    pixels[i][j] = node.color;
                 }
             }
         } else {
-            // Recursively decompress children
             for (int i = 0; i < 4; i++) {
-                decompressTree(node.children[i], pixels);
+                reconstructImage(pixels, node.children[i], originalWidth, originalHeight);
             }
         }
     }
     
 
-
 }
-
