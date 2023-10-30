@@ -105,6 +105,8 @@ public class App {
                     double PSNR = PSNRCalculator.calculatePSNR(originalimage, decompressedimage);
                     System.out.println("PSNR of :" + imageName + " is " + PSNR);   
 
+                    System.out.println();
+
                 }
             }
         }

@@ -2,7 +2,7 @@ import java.io.*;
 
 public class Utility {
 
-    private static final int THRESHOLD = 50;
+    private static final int THRESHOLD = 100;
 
     private QuadtreeNode buildQuadtree(int[][][] pixels, int x, int y, int size) {
         if (x < 0 || y < 0 || x >= pixels.length || y >= pixels[0].length || size <= 0) {
@@ -66,7 +66,7 @@ public class Utility {
         int maxY = Math.min(y + size, pixels[0].length);
     
         int countExceedingThreshold = 0;
-        int allowedExceedingThreshold = (int) (0.1 * size * size); // Allow up to 10% of the pixels to exceed the threshold
+        int allowedExceedingThreshold = (int) (0.0001 * size * size); // Allow up to 10% of the pixels to exceed the threshold
         
         for (int i = x; i < maxX; i++) {
             for (int j = y; j < maxY; j++) {
