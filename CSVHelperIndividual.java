@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class CSVHelperIndividual {
     private String csvFileName; 
-    private static final String CSV_HEADER = "SN,Test ID,File Name,Original File Size,Compressed Bin Size,File Size Difference,Compression Rate,Compression Time,Decompression Time,MAE,MSE,PSNR,QuadtreeThreshold,AllowedExceedingThreshold\n";
+    private static final String CSV_HEADER = "SN,Test ID,File Name,Original File Size,Compressed Bin Size,File Size Difference,Compression Rate,Compression Time,Decompression Time,MAE,MSE,PSNR,QuadtreeThreshold,AllowedExceedingThresholdFactor\n";
 
     public CSVHelperIndividual(String csvFilename){
         this.csvFileName = csvFilename; 

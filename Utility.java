@@ -2,7 +2,8 @@ import java.io.*;
 
 public class Utility {
 
-    private static final int THRESHOLD = 100;
+    private static final int QUADTREE_THRESHOLD = 100;
+    private static final double ALLOWED_EXCEEDING_THRESHOLD_FACTOR = 0.001; 
 
     private QuadtreeNode buildQuadtree(int[][][] pixels, int x, int y, int size) {
         if (x < 0 || y < 0 || x >= pixels.length || y >= pixels[0].length || size <= 0) {
@@ -66,7 +67,7 @@ public class Utility {
         int maxY = Math.min(y + size, pixels[0].length);
     
         int countExceedingThreshold = 0;
-        int allowedExceedingThreshold = (int) (0.0001 * size * size); // Allow up to 10% of the pixels to exceed the threshold
+        int allowedExceedingThreshold = (int) (ALLOWED_EXCEEDING_THRESHOLD_FACTOR * size * size); // Allow up to 10% of the pixels to exceed the threshold
         
         for (int i = x; i < maxX; i++) {
             for (int j = y; j < maxY; j++) {
@@ -74,7 +75,7 @@ public class Utility {
                 int diffGreen = Math.abs(pixels[i][j][1] - green);
                 int diffBlue = Math.abs(pixels[i][j][2] - blue);
                 
-                if (diffRed > THRESHOLD || diffGreen > THRESHOLD || diffBlue > THRESHOLD) {
+                if (diffRed > QUADTREE_THRESHOLD || diffGreen > QUADTREE_THRESHOLD || diffBlue > QUADTREE_THRESHOLD) {
                     countExceedingThreshold++;
                     if (countExceedingThreshold > allowedExceedingThreshold) {
                         return false;

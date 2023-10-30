@@ -53,7 +53,7 @@ public class TestFrameWorkIndividual{
     }
     
 
-    public void test(int quadtreeThreshold, double allowedExceedingThreshold) throws IOException, ClassNotFoundException {
+    public void test(int quadtreeThreshold, double allowedExceedingThresholdFactor) throws IOException, ClassNotFoundException {
         //Create an instance of Utility
         Utility Utility = new Utility();
 
@@ -80,7 +80,7 @@ public class TestFrameWorkIndividual{
 
         testFrameWorkIndividual.writeToResult("testID: " + testFrameWorkIndividual.testID);
         testFrameWorkIndividual.writeToResult("quadtreeThreshold: " + quadtreeThreshold);
-        testFrameWorkIndividual.writeToResult("allowedExceedingThreshold: " + allowedExceedingThreshold);
+        testFrameWorkIndividual.writeToResult("allowedExceedingThreshold: " + allowedExceedingThresholdFactor);
         testFrameWorkIndividual.writeToResult("Image Directory: " + ImageDirectory);
 
 
@@ -113,7 +113,7 @@ public class TestFrameWorkIndividual{
                     // start compress timer
                     long compressStartTime = System.currentTimeMillis();
                     //call compress function
-                    Utility.Compress(pixelData, compressed_file_name, quadtreeThreshold, allowedExceedingThreshold);
+                    Utility.Compress(pixelData, compressed_file_name, quadtreeThreshold, allowedExceedingThresholdFactor);
                     /**
                      * Please note that the threshold has been exposed here 
                      */
@@ -220,7 +220,7 @@ public class TestFrameWorkIndividual{
                     // 11_QuadtreeThreshold
                     recordRow[11] = Integer.toString(quadtreeThreshold); 
                     // 12_AllowedExceedingThreshold
-                    recordRow[12] = Double.toString(allowedExceedingThreshold); 
+                    recordRow[12] = Double.toString(allowedExceedingThresholdFactor); 
 
                     // Add the row to the data table 
                     compressionDataTable.add(recordRow); 
