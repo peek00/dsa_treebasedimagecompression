@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -51,6 +53,27 @@ public class TestFrameWorkIndividual{
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
         }
     }
+
+    //TIMOTHY'S CODE TO COUNT UNIQUE PIXEL COUNTS
+    private long uniquePixelCount(int[][][] pixels) {
+        long _uniquePixelCount = 0;
+        Set<String> uniqueColors = new HashSet<>();
+
+        for (int i = 0; i < pixels.length; i++) {
+            for (int j = 0; j < pixels[i].length; j++) {
+                int r = pixels[i][j][0];
+                int g = pixels[i][j][1];
+                int b = pixels[i][j][2];
+                String colorKey = r + "," + g + "," + b;
+                uniqueColors.add(colorKey);
+            }
+        }
+        System.out.println("Colors: ");
+        for (String c : uniqueColors) {
+            _uniquePixelCount++;
+        }
+        return _uniquePixelCount;
+    }
     
 
     public void test(int quadtreeThreshold, double allowedExceedingThresholdFactor) throws IOException, ClassNotFoundException {
@@ -67,15 +90,7 @@ public class TestFrameWorkIndividual{
         //Define original file directory to loop through
         String ImageDirectory = testFrameWorkIndividual.testImageDirectory; 
 
-                // Stores the compression stats for each image in following format 
-        /*
-         * {
-         *     [ 0_Test_ID, 1_File_Name, 
-         *       2_Original_File_Size, 3_Compressed_Bin_Size, 4_File_Size_Difference, 5_Compression_Rate, 
-         *       6_Compression_Time, 7_Decompression_Time, 
-         *       8_MAE, 9_MSE, 10_PSNR, 11_Threshold ], 
-         * } 
-         */
+        // Stores the compression stats for each image in following format 
         ArrayList<String[]> compressionDataTable = new ArrayList<>(); 
         
         // List all files in the directory
@@ -151,11 +166,15 @@ public class TestFrameWorkIndividual{
                     testFrameWorkIndividual.writeToResult(compressedSizeOutput);
 
                     
-                    //Find the Difference
+                    //Find the Difference in file size 
                     long differenceInFileSize = originalFileSize - compressedFileSize;
                     double compressionRate = 1.0 - compressedFileSize / (double) originalFileSize; // casting is necessary to preserve the accuracy 
-                    String differenceInFileSizeOutput = String.format("Bytes saved from compression of %s : %d bytes, with compression rate of: %.2f", imageName, differenceInFileSize, compressionRate); 
+                    String differenceInFileSizeOutput = String.format("Bytes saved from compression of %s : %d bytes", imageName, differenceInFileSize); 
+                    String compressionRateOutput = String.format("Compression Rate (1 - compressedFileSize/originalFileSize) for %s : %.2f", imageName, compressionRate);
+                    System.out.println(differenceInFileSizeOutput);
+                    System.out.println(compressionRateOutput);
                     testFrameWorkIndividual.writeToResult(differenceInFileSizeOutput);
+                    testFrameWorkIndividual.writeToResult(compressionRateOutput);
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
 
                     // start decompress timer
@@ -168,11 +187,40 @@ public class TestFrameWorkIndividual{
                     long decompressEndTime = System.currentTimeMillis();
                     long decompressExecutionTime = decompressEndTime - decompressStartTime;
                     String decompressionExecutionOutput = String.format("Decompress Execution Time for  %s : %d milliseconds", imageName, decompressExecutionTime);
+                    System.out.println(decompressionExecutionOutput);
                     // Write to test result 
                     testFrameWorkIndividual.writeToResult(decompressionExecutionOutput);
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
 
+                    // count the number of unique pixel before compression and after decompression 
+                    // count the number of unique pixel after decompression 
+                    long uniquePixelCountBefore = uniquePixelCount(pixelData); 
+                    long uniquePixelCountAfter = uniquePixelCount(newPixelData); 
                     
+                    String uniquePixelCountBeforeOutput = String.format("Unique pixel count before compression: %d", uniquePixelCountBefore);
+                    String uniquePixelCountAfterOutput = String.format("Unique pixel count after compression: %d", uniquePixelCountAfter);
+                    
+                    System.out.println(uniquePixelCountBeforeOutput);
+                    System.out.println(uniquePixelCountAfterOutput);
+                    
+                    testFrameWorkIndividual.writeToResult(uniquePixelCountBeforeOutput);
+                    testFrameWorkIndividual.writeToResult(uniquePixelCountAfterOutput);
+
+
+                    long uniquePixelCountChange = uniquePixelCountBefore - uniquePixelCountAfter; 
+                    double uniquePixelCountReductionRate = 1 - uniquePixelCountAfter / (double) uniquePixelCountBefore; 
+
+                    String uniquePixelCountChangeOutput = String.format("Unique pixel count reduction  for %s : %d", imageName, uniquePixelCountChange);
+                    String uniquePixelCountReductionRateOutput = String.format("Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for %s : %.2f", imageName, uniquePixelCountReductionRate);
+
+                    System.out.println(uniquePixelCountChangeOutput);
+                    System.out.println(uniquePixelCountReductionRateOutput);
+
+                    testFrameWorkIndividual.writeToResult(uniquePixelCountChangeOutput);
+                    testFrameWorkIndividual.writeToResult(uniquePixelCountReductionRateOutput);
+
+                    testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+
                     //convert back to image for visualisation
                     PixeltoImageConverter PixeltoImageConverter = new PixeltoImageConverter(newPixelData);
                     PixeltoImageConverter.saveImage("Decompressed/" + imageName, "png");
@@ -201,7 +249,7 @@ public class TestFrameWorkIndividual{
 
 
                     // initialize a record row with 13 slots (0-11)
-                    String[] recordRow = new String[13]; 
+                    String[] recordRow = new String[17]; 
                     // 0_Test_ID
                     recordRow[0] = testFrameWorkIndividual.testID; // this test instance's testID 
                     // 1_File_Name
@@ -217,14 +265,25 @@ public class TestFrameWorkIndividual{
                     recordRow[6] = Long.toString(compressExecutionTime); 
                     // 7_Decompression_Time
                     recordRow[7] = Long.toString(decompressExecutionTime); 
-                    // 8_MAE, 9_MSE, 10_PSNR
-                    recordRow[8] = Double.toString(MAE); 
-                    recordRow[9] = Double.toString(MSE); 
-                    recordRow[10] = Double.toString(PSNR); 
-                    // 11_QuadtreeThreshold
-                    recordRow[11] = Integer.toString(quadtreeThreshold); 
-                    // 12_AllowedExceedingThreshold
-                    recordRow[12] = Double.toString(allowedExceedingThresholdFactor); 
+                    // 8_Unique_Pixel_Count_Before 
+                    recordRow[8] = Long.toString(uniquePixelCountBefore); 
+                    // 9_Unique_Pixel_Count_after
+                    recordRow[9] = Long.toString(uniquePixelCountAfter); 
+                    // 10_Unique_Pixel_Count_Change
+                    recordRow[10] = Long.toString(uniquePixelCountChange); 
+                    // 11_Unique_Pixel_Count_Reduction
+                    recordRow[11] = Double.toString(uniquePixelCountReductionRate); 
+
+                    // 12_MAE, 13_MSE, 14_PSNR
+                    recordRow[12] = Double.toString(MAE); 
+                    recordRow[13] = Double.toString(MSE); 
+                    recordRow[14] = Double.toString(PSNR); 
+
+                    // 15_QuadtreeThreshold
+                    recordRow[15] = Integer.toString(quadtreeThreshold); 
+
+                    // 16_AllowedExceedingThreshold
+                    recordRow[16] = Double.toString(allowedExceedingThresholdFactor); 
 
                     // Add the row to the data table 
                     compressionDataTable.add(recordRow); 
@@ -247,13 +306,13 @@ public class TestFrameWorkIndividual{
         TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
         
         // define the min, max and steps for both thresholds 
-        int minQuadtreeThreshold = 50;
+        int minQuadtreeThreshold = 100;
         int maxQuadtreeThreshold = 100;
         int quadtreeThresholdStep = 10; 
         // 5 test values 
 
-        double minAllowedExceedingThreshold = 0.0010; 
-        double maxAllowedExceedingThreshold = 0.1000; 
+        double minAllowedExceedingThreshold = 0.001; 
+        double maxAllowedExceedingThreshold = 0.001; 
         double allowedExceedingThresholdStep =0.0100;
         // 10 test values 
 
