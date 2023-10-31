@@ -40,3 +40,4 @@ java/build/**
 # log files
 *.log
 compressionSummaryData.csv
+DataAnalysis/.ipynb_checkpoints/PerformanceDataAnalysis-checkpoint.ipynb
