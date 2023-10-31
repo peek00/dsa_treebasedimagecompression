@@ -300,27 +300,28 @@ public class TestFrameWorkIndividual{
         csvHelperIndividual.appendToCSV(compressionDataTable);
 }
 
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException{
+    public static void enumerateTests (
+        int minQuadtreeThreshold, 
+        int maxQuadtreeThreshold, 
+        int quadtreeThresholdStep, 
+        double minAllowedExceedingThreshold, 
+        double maxAllowedExceedingThreshold, 
+        double allowedExceedingThresholdStep
+    ) throws IOException, ClassNotFoundException {
 
         TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
         
-        // define the min, max and steps for both thresholds 
-        int minQuadtreeThreshold = 100;
-        int maxQuadtreeThreshold = 100;
-        int quadtreeThresholdStep = 10; 
-        // 5 test values 
-
-        double minAllowedExceedingThreshold = 0.001; 
-        double maxAllowedExceedingThreshold = 0.001; 
-        double allowedExceedingThresholdStep =0.0100;
-        // 10 test values 
-
         for (int qt = minQuadtreeThreshold; qt <= maxQuadtreeThreshold; qt = qt+quadtreeThresholdStep){
             for (double aet = minAllowedExceedingThreshold; aet <= maxAllowedExceedingThreshold; aet = aet+allowedExceedingThresholdStep){
                 testFrameWorkIndividual.test(qt, aet); 
             }
         }
+    }
+
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException{
+
+        enumerateTests(50, 200, 10, 0.001, 0.100, 0.010); 
 
     }
 }
