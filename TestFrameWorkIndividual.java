@@ -320,6 +320,16 @@ public class TestFrameWorkIndividual{
 
     public static void main(String[] args) throws IOException, ClassNotFoundException{
 
+        //Run 1: 
+        //enumerateTests(50, 200, 10, 0.001, 0.100, 0.010); 
+
+        //Run 2: 
+        //enumerateTests(110, 130, 1, 0.0001, 0.001, 0.0005); 
+
+        //Run 3: 
+        // enumerateTests(110, 130, 1, 0.0001, 0.0015, 0.0001); 
+
+        //Run 4:  
         // enumerateTests(120, 135, 1, 0.00001, 0.00030, 0.00001); 
 
         TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
