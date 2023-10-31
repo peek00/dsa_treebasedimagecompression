@@ -13,6 +13,20 @@ public class Utility {
         this.ALLOWED_EXCEEDING_THRESHOLD_FACTOR = inputFactor; 
     }
 
+    public class QuadtreeNode {
+        int x, y; 
+        int size; 
+        int[] color; 
+        QuadtreeNode[] children; 
+    
+        public QuadtreeNode(int x, int y, int size) {
+            this.x = x;
+            this.y = y;
+            this.size = size;
+            this.color = null;
+            this.children = null;
+        }
+    }
 
     private QuadtreeNode buildQuadtree(int[][][] pixels, int x, int y, int size) {
         if (x < 0 || y < 0 || x >= pixels.length || y >= pixels[0].length || size <= 0) {
