@@ -68,7 +68,6 @@ public class TestFrameWorkIndividual{
                 uniqueColors.add(colorKey);
             }
         }
-        System.out.println("Colors: ");
         for (String c : uniqueColors) {
             _uniquePixelCount++;
         }
