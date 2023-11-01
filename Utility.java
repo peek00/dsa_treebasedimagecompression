@@ -110,17 +110,17 @@ public class Utility {
         return true;
     }
 
-    public void Compress(int[][][] pixels, String outputFileName) throws IOException {
+public void Compress(int[][][] pixels, String outputFileName) throws IOException {
         if(pixels == null || pixels.length == 0 || pixels[0].length == 0) {
             throw new IllegalArgumentException("Invalid pixel data provided.");
         }
     
         int maxSize = Math.max(pixels.length, pixels[0].length); // Handle non-square images
         QuadtreeNode root = buildQuadtree(pixels, 0, 0, maxSize);
+
+        //Create an object output stream to write the compressed file
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
-            oos.writeInt(pixels.length);    // Save the width
-            oos.writeInt(pixels[0].length); // Save the height
-            oos.writeInt(maxSize);          // Write the max size (which is still needed to build the quadtree)
+            oos.writeInt(sizeToInt(pixels)); // Save the width and height in one int to save space
             writeQuadtree(oos, root);
         }
     }    
@@ -144,8 +144,18 @@ public class Utility {
         }
     }
     
+    private int sizeToInt(int[][][] pixels){
+        return (pixels.length<<16|pixels[0].length);
+    }
+
+    private int[] intToSize(int num){
+        int width = (num>>16)&0xFFFF;
+        int height = num & 0xFFFF;
+        return new int[]{width, height};
+    }
+
     private int colorToInt(int[] color) {
-        return (color[0] << 16) | (color[1] << 8) | color[2];
+    return (color[0] << 16) | (color[1] << 8) | color[2];
     }
 
     private int[] intToColor(int rgb) {
@@ -154,10 +164,11 @@ public class Utility {
     
     public int[][][] Decompress(String inputFileName) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
-            int originalWidth = ois.readInt();
-            int originalHeight = ois.readInt();
-            int size = ois.readInt();
-            QuadtreeNode root = readQuadtree(ois, 0, 0, size);
+            int[] widthAndHeight = intToSize(ois.readInt());
+            int originalWidth = widthAndHeight[0];
+            int originalHeight = widthAndHeight[1];
+            int maxSize = Math.max(originalWidth, originalHeight);
+            QuadtreeNode root = readQuadtree(ois, 0, 0, maxSize);
             int[][][] pixels = new int[originalWidth][originalHeight][3];
             reconstructImage(pixels, root, originalWidth, originalHeight);
     
@@ -168,7 +179,6 @@ public class Utility {
             return pixels;
         }
     }
-    
     
     private QuadtreeNode readQuadtree(ObjectInputStream ois, int x, int y, int size) throws IOException {
         boolean exists = ois.readBoolean();
