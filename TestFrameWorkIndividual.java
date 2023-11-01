@@ -327,7 +327,7 @@ public class TestFrameWorkIndividual{
         //enumerateTests(50, 200, 10, 0.001, 0.100, 0.010); 
 
         //Run 2: 
-        //enumerateTests(110, 130, 1, 0.0001, 0.001, 0.0005); 
+        //enumerateTests(110, 130, 1, 0.0001, 0.001, 0.0001); 
 
         //Run 3: 
         // enumerateTests(110, 130, 1, 0.0001, 0.0015, 0.0001); 
@@ -340,13 +340,22 @@ public class TestFrameWorkIndividual{
         // testFrameWorkIndividual.test(128, 0.00003);
 
         /**
-         * Test on 1101 
+         * Test on 1101 A
          */
         // Run 1
         // enumerateTests(50, 150, 1, 0.0, 0.100, 0.001);
         // Run 2
         // enumerateTests(100, 130, 1, 0.0, 0.0100, 0.0001); 
         // Run 3
-        enumerateTests(120, 140, 1, 0.0, 0.00100, 0.00001);
+        // enumerateTests(120, 140, 1, 0.0, 0.00100, 0.00001);
+
+        /**
+         * Test on 1101 B: with Axel's Code 
+         */
+        // Run 1
+        // enumerateTests(100, 140, 1, 0.0, 0.05, 0.0005);
+        // Run 2
+        enumerateTests(120, 140, 1, 0.0, 0.001000, 0.000005); 
+        
     }
 }
