@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class CSVHelper {
     private static final String CSV_FILE_NAME = "compressionSummaryData.csv";
-    private static final String CSV_HEADER = "TestID,Compression Time,File Size Difference,Compression Rate,Decompression Time,MAE,MSE,PSNR, threshold\n";
+    private static final String CSV_HEADER = "TestID,Compression Time,File Size Difference,Compression Rate,Decompression Time,MAE,MSE,PSNR,QuadTreeThreshold,allowedExceedingThresholdFactor\n";
 
     public CSVHelper(){
     }
@@ -31,11 +31,12 @@ public class CSVHelper {
         double MAE, 
         double MSE, 
         double PSNR, 
-        int threshold
+        int quadTreeThreshold, 
+        double allowedExceedingThresholdFactor
         ) {
         try (FileWriter fw = new FileWriter(CSV_FILE_NAME, true)) { // true for append mode
-            fw.write(String.format("%s,%f,%f,%f,%f,%f,%f,%f,%d\n", testID, compressionTime, fileSizeDifference, 
-                    compressionRate, decompressionTime, MAE, MSE, PSNR, threshold));
+            fw.write(String.format("%s,%f,%f,%f,%f,%f,%f,%f,%d,%.8f\n", testID, compressionTime, fileSizeDifference, 
+                    compressionRate, decompressionTime, MAE, MSE, PSNR, quadTreeThreshold, allowedExceedingThresholdFactor));
         } catch (IOException e) {
             e.printStackTrace();
         }

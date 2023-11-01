@@ -65,9 +65,13 @@ public class TestFrameWork{
         return sum / list.size();
     }
 
-    public void test(int threshold) throws IOException, ClassNotFoundException {
+    public void test(int quadtreeThreshold, double allowedExceedingThresholdFactor) throws IOException, ClassNotFoundException {
         //Create an instance of Utility
         Utility Utility = new Utility();
+
+         // Update the Test Parameters 
+        Utility.setQuadTreeThreshold(quadtreeThreshold);
+        Utility.setAllowedExceedingThresholdFactor(allowedExceedingThresholdFactor);
 
         // Create an instance of TestFramework 
         TestFrameWork testFrameWork = new TestFrameWork(); 
@@ -79,7 +83,8 @@ public class TestFrameWork{
         // List all files in the directory
         File directory = new File(ImageDirectory);
         testFrameWork.writeToResult("testID: " + testFrameWork.testID);
-        testFrameWork.writeToResult("Threshold: " + threshold);
+        testFrameWork.writeToResult("Threshold: " + quadtreeThreshold);
+        testFrameWork.writeToResult("Factor: " + allowedExceedingThresholdFactor); 
         testFrameWork.writeToResult("Image Directory: " + ImageDirectory);
 
         /* Stores varies parameters for overall performance analysis*/
@@ -172,7 +177,7 @@ public class TestFrameWork{
                     
                     //Find the Difference
                     long differenceInFileSize = originalFileSize - compressedFileSize;
-                    double compressionRate = 1- compressedFileSize / originalFileSize; 
+                    double compressionRate = 1- compressedFileSize / (double) originalFileSize; 
 
                     // Add to the list 
                     differenceInFileSizeList.add(differenceInFileSize);
@@ -259,7 +264,8 @@ public class TestFrameWork{
             maeList, 
             mseList, 
             psnrList,
-            threshold
+            quadtreeThreshold, 
+            allowedExceedingThresholdFactor
             ); 
 
     }
@@ -286,7 +292,8 @@ public class TestFrameWork{
         ArrayList<Double> maeList, 
         ArrayList<Double> mseList, 
         ArrayList<Double> psnrList, 
-        int threshold
+        int quadtreeThreshold, 
+        double allowedExceedingThresholdFactor
         ){
         
         double averageCompressionTime = getAverage(compressionTimeList); 
@@ -308,7 +315,8 @@ public class TestFrameWork{
             averageMAE,  
             averageMSE, 
             averagePSNR,
-            threshold
+            quadtreeThreshold, 
+            allowedExceedingThresholdFactor
         );
     }
 
@@ -317,10 +325,42 @@ public class TestFrameWork{
 
         TestFrameWork testFrameWork = new TestFrameWork(); 
         
-        // test with different thresholds 
-        testFrameWork.test(500); 
-        testFrameWork.test(1000); 
-        testFrameWork.test(5000); 
+        /*
+         *         /**
+         *  Consolidation Test 1 
+        | Test231031-1 | 120 | 0.001 | 0.400657 | 
+        | Test231031-1 | 130 | 0.001 | 0.388582 | 
+        | Test231031-1 | 110 | 0.001 | 0.379369 | 
+
+        | Test231031-4 | 128 | 0.00003 | 0.270429 | 
+        | Test231031-4 | 128 | 0.00003 | 0.265261 | 
+        | Test231031-4 | 128 | 0.00002 | 0.264373 | 
+
+        | Test231101A-3 | 133 | 0.00003 | 0.305497 | 
+        | Test231101A-3 | 136 | 0.00000 | 0.304271 | 
+        | Test231101A-3 | 135 | 0.00031 | 0.294660 | 
+
+        | Test231101B-2 | 135 | 0.000025 | 0.336467 | 
+        | Test231101B-2 | 136 | 0.000030 | 0.324084 | 
+        | Test231101B-2 | 135 | 0.000155 | 0.312431 | 
+         * 
+         */
+
+        testFrameWork.test(120, 0.001);
+        testFrameWork.test(130, 0.001);
+        testFrameWork.test(110, 0.001);
+
+        testFrameWork.test(128, 0.0003);
+        testFrameWork.test(128, 0.0003);
+        testFrameWork.test(128, 0.0002);
+
+        testFrameWork.test(133, 0.0003);
+        testFrameWork.test(136, 0.00000);
+        testFrameWork.test(135, 0.00031);
+
+        testFrameWork.test(135, 0.000025);
+        testFrameWork.test(136, 0.000030);
+        testFrameWork.test(135, 0.000155);
 
     }
 }
