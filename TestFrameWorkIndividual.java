@@ -303,15 +303,15 @@ public class TestFrameWorkIndividual{
         int minQuadtreeThreshold, 
         int maxQuadtreeThreshold, 
         int quadtreeThresholdStep, 
-        double minAllowedExceedingThreshold, 
-        double maxAllowedExceedingThreshold, 
-        double allowedExceedingThresholdStep
+        double minAllowedExceedingThresholdFactor, 
+        double maxAllowedExceedingThresholdFactor, 
+        double allowedExceedingThresholdFactorStep
     ) throws IOException, ClassNotFoundException {
 
         TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
         
         for (int qt = minQuadtreeThreshold; qt <= maxQuadtreeThreshold; qt = qt+quadtreeThresholdStep){
-            for (double aet = minAllowedExceedingThreshold; aet <= maxAllowedExceedingThreshold; aet = aet+allowedExceedingThresholdStep){
+            for (double aet = minAllowedExceedingThresholdFactor; aet <= maxAllowedExceedingThresholdFactor; aet = aet+allowedExceedingThresholdFactorStep){
                 testFrameWorkIndividual.test(qt, aet); 
             }
         }
@@ -320,6 +320,9 @@ public class TestFrameWorkIndividual{
 
     public static void main(String[] args) throws IOException, ClassNotFoundException{
 
+        /**
+         *  Test on 1031
+         */
         //Run 1: 
         //enumerateTests(50, 200, 10, 0.001, 0.100, 0.010); 
 
@@ -332,7 +335,18 @@ public class TestFrameWorkIndividual{
         //Run 4:  
         // enumerateTests(120, 135, 1, 0.00001, 0.00030, 0.00001); 
 
-        TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
-        testFrameWorkIndividual.test(128, 0.00003);
+        // Optimal Value found 
+        // TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
+        // testFrameWorkIndividual.test(128, 0.00003);
+
+        /**
+         * Test on 1101 
+         */
+        // Run 1
+        // enumerateTests(50, 150, 1, 0.0, 0.100, 0.001);
+        // Run 2
+        // enumerateTests(100, 130, 1, 0.0, 0.0100, 0.0001); 
+        // Run 3
+        enumerateTests(120, 140, 1, 0.0, 0.00100, 0.00001);
     }
 }
