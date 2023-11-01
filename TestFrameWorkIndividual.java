@@ -355,7 +355,45 @@ public class TestFrameWorkIndividual{
         // Run 1
         // enumerateTests(100, 140, 1, 0.0, 0.05, 0.0005);
         // Run 2
-        enumerateTests(120, 140, 1, 0.0, 0.001000, 0.000005); 
+        // enumerateTests(120, 140, 1, 0.0, 0.001000, 0.000005); 
+
+        /**
+         *  Consolidation Test 1 
+        | Test231031-1 | 120 | 0.001 | 0.400657 | 
+        | Test231031-1 | 130 | 0.001 | 0.388582 | 
+        | Test231031-1 | 110 | 0.001 | 0.379369 | 
+
+        | Test231031-4 | 128 | 0.00003 | 0.270429 | 
+        | Test231031-4 | 128 | 0.00003 | 0.265261 | 
+        | Test231031-4 | 128 | 0.00002 | 0.264373 | 
+
+        | Test231101A-3 | 133 | 0.00003 | 0.305497 | 
+        | Test231101A-3 | 136 | 0.00000 | 0.304271 | 
+        | Test231101A-3 | 135 | 0.00031 | 0.294660 | 
+
+        | Test231101B-2 | 135 | 0.000025 | 0.336467 | 
+        | Test231101B-2 | 136 | 0.000030 | 0.324084 | 
+        | Test231101B-2 | 135 | 0.000155 | 0.312431 | 
+         * 
+         */
+
+        TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
+
+        testFrameWorkIndividual.test(120, 0.001)
+        testFrameWorkIndividual.test(130, 0.001)
+        testFrameWorkIndividual.test(110, 0.001)
+
+        testFrameWorkIndividual.test(128, 0.0003)
+        testFrameWorkIndividual.test(128, 0.0003)
+        testFrameWorkIndividual.test(128, 0.0002)
+
+        testFrameWorkIndividual.test(133, 0.0003)
+        testFrameWorkIndividual.test(136, 0.00000)
+        testFrameWorkIndividual.test(135, 0.00031)
+
+        testFrameWorkIndividual.test(135, 0.000025)
+        testFrameWorkIndividual.test(136, 0.000030)
+        testFrameWorkIndividual.test(135, 0.000155)
         
     }
 }
