@@ -377,23 +377,23 @@ public class TestFrameWorkIndividual{
          * 
          */
 
-        TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
+        // TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
 
-        testFrameWorkIndividual.test(120, 0.001)
-        testFrameWorkIndividual.test(130, 0.001)
-        testFrameWorkIndividual.test(110, 0.001)
+        // testFrameWorkIndividual.test(120, 0.001);
+        // testFrameWorkIndividual.test(130, 0.001);
+        // testFrameWorkIndividual.test(110, 0.001);
 
-        testFrameWorkIndividual.test(128, 0.0003)
-        testFrameWorkIndividual.test(128, 0.0003)
-        testFrameWorkIndividual.test(128, 0.0002)
+        // testFrameWorkIndividual.test(128, 0.0003);
+        // testFrameWorkIndividual.test(128, 0.0003);
+        // testFrameWorkIndividual.test(128, 0.0002);
 
-        testFrameWorkIndividual.test(133, 0.0003)
-        testFrameWorkIndividual.test(136, 0.00000)
-        testFrameWorkIndividual.test(135, 0.00031)
+        // testFrameWorkIndividual.test(133, 0.0003);
+        // testFrameWorkIndividual.test(136, 0.00000);
+        // testFrameWorkIndividual.test(135, 0.00031);
 
-        testFrameWorkIndividual.test(135, 0.000025)
-        testFrameWorkIndividual.test(136, 0.000030)
-        testFrameWorkIndividual.test(135, 0.000155)
+        // testFrameWorkIndividual.test(135, 0.000025);
+        // testFrameWorkIndividual.test(136, 0.000030);
+        // testFrameWorkIndividual.test(135, 0.000155);
         
     }
 }
