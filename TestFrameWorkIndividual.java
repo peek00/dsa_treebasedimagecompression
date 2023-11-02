@@ -54,25 +54,25 @@ public class TestFrameWorkIndividual{
         }
     }
 
-    //TIMOTHY'S CODE TO COUNT UNIQUE PIXEL COUNTS
-    private long uniquePixelCount(int[][][] pixels) {
-        long _uniquePixelCount = 0;
-        Set<String> uniqueColors = new HashSet<>();
+    // //TIMOTHY'S CODE TO COUNT UNIQUE PIXEL COUNTS
+    // private long uniquePixelCount(int[][][] pixels) {
+    //     long _uniquePixelCount = 0;
+    //     Set<String> uniqueColors = new HashSet<>();
 
-        for (int i = 0; i < pixels.length; i++) {
-            for (int j = 0; j < pixels[i].length; j++) {
-                int r = pixels[i][j][0];
-                int g = pixels[i][j][1];
-                int b = pixels[i][j][2];
-                String colorKey = r + "," + g + "," + b;
-                uniqueColors.add(colorKey);
-            }
-        }
-        for (String c : uniqueColors) {
-            _uniquePixelCount++;
-        }
-        return _uniquePixelCount;
-    }
+    //     for (int i = 0; i < pixels.length; i++) {
+    //         for (int j = 0; j < pixels[i].length; j++) {
+    //             int r = pixels[i][j][0];
+    //             int g = pixels[i][j][1];
+    //             int b = pixels[i][j][2];
+    //             String colorKey = r + "," + g + "," + b;
+    //             uniqueColors.add(colorKey);
+    //         }
+    //     }
+    //     for (String c : uniqueColors) {
+    //         _uniquePixelCount++;
+    //     }
+    //     return _uniquePixelCount;
+    // }
     
 
     public void test(int quadtreeThreshold, double allowedExceedingThresholdFactor) throws IOException, ClassNotFoundException {
@@ -191,32 +191,32 @@ public class TestFrameWorkIndividual{
                     testFrameWorkIndividual.writeToResult(decompressionExecutionOutput);
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
 
-                    // count the number of unique pixel before compression and after decompression 
-                    // count the number of unique pixel after decompression 
-                    long uniquePixelCountBefore = uniquePixelCount(pixelData); 
-                    long uniquePixelCountAfter = uniquePixelCount(newPixelData); 
+                    // // count the number of unique pixel before compression and after decompression 
+                    // // count the number of unique pixel after decompression 
+                    // long uniquePixelCountBefore = uniquePixelCount(pixelData); 
+                    // long uniquePixelCountAfter = uniquePixelCount(newPixelData); 
                     
-                    String uniquePixelCountBeforeOutput = String.format("Unique pixel count before compression: %d", uniquePixelCountBefore);
-                    String uniquePixelCountAfterOutput = String.format("Unique pixel count after compression: %d", uniquePixelCountAfter);
+                    // String uniquePixelCountBeforeOutput = String.format("Unique pixel count before compression: %d", uniquePixelCountBefore);
+                    // String uniquePixelCountAfterOutput = String.format("Unique pixel count after compression: %d", uniquePixelCountAfter);
                     
-                    System.out.println(uniquePixelCountBeforeOutput);
-                    System.out.println(uniquePixelCountAfterOutput);
+                    // // System.out.println(uniquePixelCountBeforeOutput);
+                    // // System.out.println(uniquePixelCountAfterOutput);
                     
-                    testFrameWorkIndividual.writeToResult(uniquePixelCountBeforeOutput);
-                    testFrameWorkIndividual.writeToResult(uniquePixelCountAfterOutput);
+                    // // testFrameWorkIndividual.writeToResult(uniquePixelCountBeforeOutput);
+                    // // testFrameWorkIndividual.writeToResult(uniquePixelCountAfterOutput);
 
 
-                    long uniquePixelCountChange = uniquePixelCountBefore - uniquePixelCountAfter; 
-                    double uniquePixelCountReductionRate = 1 - uniquePixelCountAfter / (double) uniquePixelCountBefore; 
+                    // // long uniquePixelCountChange = uniquePixelCountBefore - uniquePixelCountAfter; 
+                    // // double uniquePixelCountReductionRate = 1 - uniquePixelCountAfter / (double) uniquePixelCountBefore; 
 
-                    String uniquePixelCountChangeOutput = String.format("Unique pixel count reduction  for %s : %d", imageName, uniquePixelCountChange);
-                    String uniquePixelCountReductionRateOutput = String.format("Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for %s : %.2f", imageName, uniquePixelCountReductionRate);
+                    // String uniquePixelCountChangeOutput = String.format("Unique pixel count reduction  for %s : %d", imageName, uniquePixelCountChange);
+                    // String uniquePixelCountReductionRateOutput = String.format("Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for %s : %.2f", imageName, uniquePixelCountReductionRate);
 
-                    System.out.println(uniquePixelCountChangeOutput);
-                    System.out.println(uniquePixelCountReductionRateOutput);
+                    // System.out.println(uniquePixelCountChangeOutput);
+                    // System.out.println(uniquePixelCountReductionRateOutput);
 
-                    testFrameWorkIndividual.writeToResult(uniquePixelCountChangeOutput);
-                    testFrameWorkIndividual.writeToResult(uniquePixelCountReductionRateOutput);
+                    // testFrameWorkIndividual.writeToResult(uniquePixelCountChangeOutput);
+                    // testFrameWorkIndividual.writeToResult(uniquePixelCountReductionRateOutput);
 
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
 
@@ -265,13 +265,13 @@ public class TestFrameWorkIndividual{
                     // 7_Decompression_Time
                     recordRow[7] = Long.toString(decompressExecutionTime); 
                     // 8_Unique_Pixel_Count_Before 
-                    recordRow[8] = Long.toString(uniquePixelCountBefore); 
+                    recordRow[8] = Long.toString(0); 
                     // 9_Unique_Pixel_Count_after
-                    recordRow[9] = Long.toString(uniquePixelCountAfter); 
+                    recordRow[9] = Long.toString(0); 
                     // 10_Unique_Pixel_Count_Change
-                    recordRow[10] = Long.toString(uniquePixelCountChange); 
+                    recordRow[10] = Long.toString(0); 
                     // 11_Unique_Pixel_Count_Reduction
-                    recordRow[11] = Double.toString(uniquePixelCountReductionRate); 
+                    recordRow[11] = Double.toString(0); 
 
                     // 12_MAE, 13_MSE, 14_PSNR
                     recordRow[12] = Double.toString(MAE); 
@@ -357,6 +357,16 @@ public class TestFrameWorkIndividual{
         // Run 2
         // enumerateTests(120, 140, 1, 0.0, 0.001000, 0.000005); 
 
+        
+        // // Run 2 v2
+        // enumerateTests(90, 130, 1, 0.0, 0.001000, 0.000005); 
+
+        // Run 3 
+        // enumerateTests(110, 130, 1, 0.0, 0.00020, 0.000001); 
+
+        // Run 3 V3 
+        enumerateTests(60, 130, 1, 0.0, 0.002000, 0.000001); 
+
         /**
          *  Consolidation Test 1 
         | Test231031-1 | 120 | 0.001 | 0.400657 | 
@@ -394,6 +404,7 @@ public class TestFrameWorkIndividual{
         // testFrameWorkIndividual.test(135, 0.000025);
         // testFrameWorkIndividual.test(136, 0.000030);
         // testFrameWorkIndividual.test(135, 0.000155);
+
         
     }
 }
