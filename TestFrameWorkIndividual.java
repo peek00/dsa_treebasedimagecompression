@@ -41,18 +41,18 @@ public class TestFrameWorkIndividual{
         this.testImageDirectory = ImageDirectory; // constructor chaining for specifying test image directories 
     }
 
-    public void writeToResult(String input){
-        try (FileWriter fileWriter = new FileWriter(testResultFilePath, true); // second parameter 'true' enables append mode
+    // public void writeToResult(String input){
+    //     try (FileWriter fileWriter = new FileWriter(testResultFilePath, true); // second parameter 'true' enables append mode
     
-            BufferedWriter bufferWriter = new BufferedWriter(fileWriter)) {
+    //         BufferedWriter bufferWriter = new BufferedWriter(fileWriter)) {
             
-            bufferWriter.newLine();   // Move to a new line
-            bufferWriter.write(input); // Write the input string
+    //         bufferWriter.newLine();   // Move to a new line
+    //         bufferWriter.write(input); // Write the input string
 
-        } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file: " + e.getMessage());
-        }
-    }
+    //     } catch (IOException e) {
+    //         System.out.println("An error occurred while writing to the file: " + e.getMessage());
+    //     }
+    // }
 
     // //TIMOTHY'S CODE TO COUNT UNIQUE PIXEL COUNTS
     // private long uniquePixelCount(int[][][] pixels) {
@@ -276,7 +276,7 @@ public class TestFrameWorkIndividual{
                     compressionDataTable.add(recordRow); 
                     
 
-                    testFrameWorkIndividual.writeToResult(String.format("Compressed File: %s", imageName));
+                    // testFrameWorkIndividual.writeToResult(String.format("Compressed File: %s", imageName));
 
 
                     // Write to test result 
@@ -300,7 +300,7 @@ public class TestFrameWorkIndividual{
             }
         }
 
-        testFrameWorkIndividual.writeToResult("Exporting data to IndividualCompressionData.csv");
+        // testFrameWorkIndividual.writeToResult("Exporting data to IndividualCompressionData.csv");
         CSVHelperIndividual csvHelperIndividual = new CSVHelperIndividual(String.format("IndividualCompressionData_since_%s.csv", testID)); // first
         csvHelperIndividual.createCSV();
         csvHelperIndividual.appendToCSV(compressionDataTable);
@@ -372,7 +372,7 @@ public class TestFrameWorkIndividual{
         // enumerateTests(110, 130, 1, 0.0, 0.00020, 0.000001); 
 
         // Run 3 V3 
-        enumerateTests(60, 130, 1, 0.0, 0.002000, 0.000001); 
+        enumerateTests(80, 120, 1, 0.0, 0.002000, 0.000005); 
 
         /**
          *  Consolidation Test 1 
