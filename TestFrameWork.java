@@ -326,7 +326,7 @@ public class TestFrameWork{
         TestFrameWork testFrameWork = new TestFrameWork(); 
         
         /*
-         *         /**
+         *
          *  Consolidation Test 1 
         | Test231031-1 | 120 | 0.001 | 0.400657 | 
         | Test231031-1 | 130 | 0.001 | 0.388582 | 
@@ -346,21 +346,26 @@ public class TestFrameWork{
          * 
          */
 
-        testFrameWork.test(120, 0.001);
-        testFrameWork.test(130, 0.001);
-        testFrameWork.test(110, 0.001);
+        // testFrameWork.test(120, 0.001);
+        // testFrameWork.test(130, 0.001);
+        // testFrameWork.test(110, 0.001);
 
-        testFrameWork.test(128, 0.0003);
-        testFrameWork.test(128, 0.0003);
-        testFrameWork.test(128, 0.0002);
+        // testFrameWork.test(128, 0.0003);
+        // testFrameWork.test(128, 0.0003);
+        // testFrameWork.test(128, 0.0002);
 
-        testFrameWork.test(133, 0.0003);
-        testFrameWork.test(136, 0.00000);
-        testFrameWork.test(135, 0.00031);
+        // testFrameWork.test(133, 0.0003);
+        // testFrameWork.test(136, 0.00000);
+        // testFrameWork.test(135, 0.00031);
 
-        testFrameWork.test(135, 0.000025);
-        testFrameWork.test(136, 0.000030);
-        testFrameWork.test(135, 0.000155);
+        // testFrameWork.test(135, 0.000025);
+        // testFrameWork.test(136, 0.000030);
+        // testFrameWork.test(135, 0.000155);
+
+        testFrameWork.test(120, 0.00006);
+        testFrameWork.test(121, 0.00015);
+        testFrameWork.test(60, 0.000045);
+        testFrameWork.test(70, 0.00009);
 
     }
 }

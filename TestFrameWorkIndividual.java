@@ -1,6 +1,6 @@
-import java.io.BufferedWriter;
+// import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+// import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,14 +26,14 @@ public class TestFrameWorkIndividual{
         // Initialize the testID for data analysis 
         this.testID = "test_"+ now.format(formatter); 
 
-        // Create the TestResult
-        File file = new File(testResultFilePath);
-        file.getParentFile().mkdirs(); // Make sure the directory exists
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            System.out.println("An error occurred while creating the file: " + e.getMessage());
-        }
+        // // Create the TestResult
+        // File file = new File(testResultFilePath);
+        // file.getParentFile().mkdirs(); // Make sure the directory exists
+        // try {
+        //     file.createNewFile();
+        // } catch (IOException e) {
+        //     System.out.println("An error occurred while creating the file: " + e.getMessage());
+        // }
     }
 
     public TestFrameWorkIndividual(String ImageDirectory){
@@ -371,8 +371,13 @@ public class TestFrameWorkIndividual{
         // Run 3 
         // enumerateTests(110, 130, 1, 0.0, 0.00020, 0.000001); 
 
-        // Run 3 V3 
-        enumerateTests(80, 120, 1, 0.0, 0.002000, 0.000005); 
+        // // Run 3 V3 
+        // enumerateTests(80, 120, 1, 0.0, 0.002000, 0.000005); 
+
+        // // Run 4 
+        // enumerateTests(60, 85, 1, 0.0, 0.002000, 0.000005); 
+
+
 
         /**
          *  Consolidation Test 1 
@@ -412,6 +417,22 @@ public class TestFrameWorkIndividual{
         // testFrameWorkIndividual.test(136, 0.000030);
         // testFrameWorkIndividual.test(135, 0.000155);
 
-        
+
+        // Test on 1102
+        // Run 1 
+        // enumerateTests(40, 200, 10, 0.000, 0.100, 0.010); 
+        // Run 2
+        // enumerateTests(80, 130, 1, 0.000, 0.0100, 0.0010); 
+        // Run 3
+        // enumerateTests(80, 120, 1, 0.000, 0.00100, 0.00010); 
+        // Run 4
+        // enumerateTests(70, 90, 1, 0.000, 0.00100, 0.00001); 
+
+        // Consolidation 2: Axel's Code 
+        TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
+        testFrameWorkIndividual.test(120, 0.00006);
+        testFrameWorkIndividual.test(121, 0.00015);
+        testFrameWorkIndividual.test(60, 0.000045);
+        testFrameWorkIndividual.test(70, 0.00009);
     }
 }
