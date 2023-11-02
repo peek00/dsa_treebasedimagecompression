@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+// import java.util.HashSet;
+// import java.util.Set;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -96,10 +96,10 @@ public class TestFrameWorkIndividual{
         File directory = new File(ImageDirectory);
         File[] files = directory.listFiles();
 
-        testFrameWorkIndividual.writeToResult("testID: " + testFrameWorkIndividual.testID);
-        testFrameWorkIndividual.writeToResult("quadtreeThreshold: " + quadtreeThreshold);
-        testFrameWorkIndividual.writeToResult("allowedExceedingThreshold: " + allowedExceedingThresholdFactor);
-        testFrameWorkIndividual.writeToResult("Image Directory: " + ImageDirectory);
+        // testFrameWorkIndividual.writeToResult("testID: " + testFrameWorkIndividual.testID);
+        // testFrameWorkIndividual.writeToResult("quadtreeThreshold: " + quadtreeThreshold);
+        // testFrameWorkIndividual.writeToResult("allowedExceedingThreshold: " + allowedExceedingThresholdFactor);
+        // testFrameWorkIndividual.writeToResult("Image Directory: " + ImageDirectory);
 
 
         if (files != null) {
@@ -126,7 +126,6 @@ public class TestFrameWorkIndividual{
 
                     // Define location and name for the compressed file to be created
                     String compressed_file_name = "Compressed/" + imageName.substring(0, imageName.lastIndexOf('.')) + ".bin";
-                    testFrameWorkIndividual.writeToResult(String.format("Compressed File: %s", imageName));
 
                     // start compress timer
                     long compressStartTime = System.currentTimeMillis();
@@ -141,40 +140,33 @@ public class TestFrameWorkIndividual{
                     // Execution Time Output 
                     String compressionExecutionTimeOutput = String.format("Compress Execution Time for %s : %d milliseconds", imageName, compressExecutionTime );
                     System.out.println(compressionExecutionTimeOutput);
-                    // Write to test result 
-                    testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
-                    testFrameWorkIndividual.writeToResult(compressionExecutionTimeOutput);
-                    testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+
 
 
                     //Check the original file size
                     File originalFile = new File(ImageDirectory + imageName);
                     long originalFileSize = originalFile.length();
-                    String originalSizeOutput = String.format("Size of the original file for %s : %d bytes", imageName, originalFileSize); 
-                    System.out.println(originalSizeOutput);
-                    // Write to test result 
-                    testFrameWorkIndividual.writeToResult(originalSizeOutput);
+                    // String originalSizeOutput = String.format("Size of the original file for %s : %d bytes", imageName, originalFileSize); 
+                    // // System.out.println(originalSizeOutput);
+
 
 
                     // Check size of the compressed file
                     File compressedFile = new File(compressed_file_name);
                     long compressedFileSize = compressedFile.length();
-                    String compressedSizeOutput = String.format("Size of the compressed file for %s : %d bytes", imageName, compressedFileSize); 
-                    System.out.println(compressedSizeOutput);
-                    // Write to test result 
-                    testFrameWorkIndividual.writeToResult(compressedSizeOutput);
+                    // String compressedSizeOutput = String.format("Size of the compressed file for %s : %d bytes", imageName, compressedFileSize); 
+                    // System.out.println(compressedSizeOutput);
+
 
                     
                     //Find the Difference in file size 
                     long differenceInFileSize = originalFileSize - compressedFileSize;
                     double compressionRate = 1.0 - compressedFileSize / (double) originalFileSize; // casting is necessary to preserve the accuracy 
                     String differenceInFileSizeOutput = String.format("Bytes saved from compression of %s : %d bytes", imageName, differenceInFileSize); 
-                    String compressionRateOutput = String.format("Compression Rate (1 - compressedFileSize/originalFileSize) for %s : %.2f", imageName, compressionRate);
+                    // String compressionRateOutput = String.format("Compression Rate (1 - compressedFileSize/originalFileSize) for %s : %.2f", imageName, compressionRate);
                     System.out.println(differenceInFileSizeOutput);
-                    System.out.println(compressionRateOutput);
-                    testFrameWorkIndividual.writeToResult(differenceInFileSizeOutput);
-                    testFrameWorkIndividual.writeToResult(compressionRateOutput);
-                    testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+                    // System.out.println(compressionRateOutput);
+
 
                     // start decompress timer
                     long decompressStartTime = System.currentTimeMillis();
@@ -187,9 +179,6 @@ public class TestFrameWorkIndividual{
                     long decompressExecutionTime = decompressEndTime - decompressStartTime;
                     String decompressionExecutionOutput = String.format("Decompress Execution Time for  %s : %d milliseconds", imageName, decompressExecutionTime);
                     System.out.println(decompressionExecutionOutput);
-                    // Write to test result 
-                    testFrameWorkIndividual.writeToResult(decompressionExecutionOutput);
-                    testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
 
                     // // count the number of unique pixel before compression and after decompression 
                     // // count the number of unique pixel after decompression 
@@ -218,7 +207,7 @@ public class TestFrameWorkIndividual{
                     // testFrameWorkIndividual.writeToResult(uniquePixelCountChangeOutput);
                     // testFrameWorkIndividual.writeToResult(uniquePixelCountReductionRateOutput);
 
-                    testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+
 
                     //convert back to image for visualisation
                     PixeltoImageConverter PixeltoImageConverter = new PixeltoImageConverter(newPixelData);
@@ -230,21 +219,20 @@ public class TestFrameWorkIndividual{
 
                     //calculate MAE
                     double MAE = MAECalculator.calculateMAE(originalimage, decompressedimage);
-                    String maeOutput = String.format("Mean Absolute Error of : %S is: %.2f",imageName ,MAE); 
-                    System.out.println(maeOutput);
-                    testFrameWorkIndividual.writeToResult(maeOutput);
+                    // String maeOutput = String.format("Mean Absolute Error of : %S is: %.2f",imageName ,MAE); 
+                    // System.out.println(maeOutput);
+
 
                     //calculate MSE
                     double MSE = MSECalculator.calculateMSE(originalimage, decompressedimage);
-                    String mseOutput = String.format("Mean Squared Error of : %S is: %.2f",imageName ,MSE); 
-                    System.out.println(mseOutput);
-                    testFrameWorkIndividual.writeToResult(mseOutput);
+                    // String mseOutput = String.format("Mean Squared Error of : %S is: %.2f",imageName ,MSE); 
+                    // System.out.println(mseOutput);
+
 
                     //calculate PSNR
                     double PSNR = PSNRCalculator.calculatePSNR(originalimage, decompressedimage);
-                    String psnrOutput = String.format("Peak Signal-to-Noise Ratio of : %S is: %.2f",imageName ,PSNR); 
-                    System.out.println(psnrOutput);
-                    testFrameWorkIndividual.writeToResult(psnrOutput);
+                    // String psnrOutput = String.format("Peak Signal-to-Noise Ratio of : %S is: %.2f",imageName ,PSNR); 
+                    // System.out.println(psnrOutput);
 
 
                     // initialize a record row with 13 slots (0-11)
@@ -288,7 +276,26 @@ public class TestFrameWorkIndividual{
                     compressionDataTable.add(recordRow); 
                     
 
-                    testFrameWorkIndividual.writeToResult("================================================================================");
+                    testFrameWorkIndividual.writeToResult(String.format("Compressed File: %s", imageName));
+
+
+                    // Write to test result 
+                    
+                    // testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+                    // testFrameWorkIndividual.writeToResult(compressionExecutionTimeOutput);
+                    // testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+                    // testFrameWorkIndividual.writeToResult(originalSizeOutput);
+                    // testFrameWorkIndividual.writeToResult(compressedSizeOutput);
+                    // testFrameWorkIndividual.writeToResult(differenceInFileSizeOutput);
+                    // testFrameWorkIndividual.writeToResult(compressionRateOutput);
+                    // testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+                    // testFrameWorkIndividual.writeToResult(decompressionExecutionOutput);
+                    // testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+                    // testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+                    // testFrameWorkIndividual.writeToResult(maeOutput);
+                    // testFrameWorkIndividual.writeToResult(mseOutput);
+                    // testFrameWorkIndividual.writeToResult(psnrOutput);
+                    // testFrameWorkIndividual.writeToResult("================================================================================");
                 }
             }
         }
