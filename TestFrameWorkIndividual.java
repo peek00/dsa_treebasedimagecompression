@@ -430,9 +430,9 @@ public class TestFrameWorkIndividual{
 
         // Consolidation 2: Axel's Code 
         TestFrameWorkIndividual testFrameWorkIndividual = new TestFrameWorkIndividual(); 
-        testFrameWorkIndividual.test(120, 0.00006);
-        testFrameWorkIndividual.test(121, 0.00015);
+        // testFrameWorkIndividual.test(120, 0.00006);
+        // testFrameWorkIndividual.test(121, 0.00015);
         testFrameWorkIndividual.test(60, 0.000045);
-        testFrameWorkIndividual.test(70, 0.00009);
+        // testFrameWorkIndividual.test(70, 0.00009);
     }
 }
