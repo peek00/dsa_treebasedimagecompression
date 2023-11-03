@@ -2,8 +2,8 @@ import java.io.*;
 
 public class Utility {
 
-    private int QUADTREE_THRESHOLD = 100;
-    private double ALLOWED_EXCEEDING_THRESHOLD_FACTOR = 0.001; 
+    private int QUADTREE_THRESHOLD = 120;
+    private double ALLOWED_EXCEEDING_THRESHOLD_FACTOR = 0.00006000; 
 
     public void setQuadTreeThreshold(int inputThreshold){
         this.QUADTREE_THRESHOLD = inputThreshold; 
