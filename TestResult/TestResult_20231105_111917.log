@@ -1,0 +1,207 @@
+
+================================================================================
+testID: test_20231105_111917
+quadtreeThreshold: 120
+allowedExceedingThreshold: 6.0E-5
+Image Directory: Original/
+================================================================================
+Compressed File: 10404007.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 10404007.png : 21 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 10404007.png : 502730 bytes
+Size of the compressed file for 10404007.png : 27377 bytes
+Bytes saved from compression of 10404007.png : 475353 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 10404007.png : 0.95
+--------------------------------------------------------------------------------
+Decompress Execution Time for  10404007.png : 9 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 61265
+Unique pixel count after compression: 3948
+Unique pixel count reduction  for 10404007.png : 57317
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 10404007.png : 0.94
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 10404007.PNG is: 24.98
+Mean Squared Error of : 10404007.PNG is: 3241.64
+Peak Signal-to-Noise Ratio of : 10404007.PNG is: 13.02
+================================================================================
+Compressed File: 1254659.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 1254659.png : 4 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 1254659.png : 342646 bytes
+Size of the compressed file for 1254659.png : 84372 bytes
+Bytes saved from compression of 1254659.png : 258274 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 1254659.png : 0.75
+--------------------------------------------------------------------------------
+Decompress Execution Time for  1254659.png : 5 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 80080
+Unique pixel count after compression: 11681
+Unique pixel count reduction  for 1254659.png : 68399
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 1254659.png : 0.85
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 1254659.PNG is: 19.95
+Mean Squared Error of : 1254659.PNG is: 2913.62
+Peak Signal-to-Noise Ratio of : 1254659.PNG is: 13.49
+================================================================================
+Compressed File: 10188041.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 10188041.png : 2 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 10188041.png : 221231 bytes
+Size of the compressed file for 10188041.png : 11047 bytes
+Bytes saved from compression of 10188041.png : 210184 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 10188041.png : 0.95
+--------------------------------------------------------------------------------
+Decompress Execution Time for  10188041.png : 4 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 41731
+Unique pixel count after compression: 1550
+Unique pixel count reduction  for 10188041.png : 40181
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 10188041.png : 0.96
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 10188041.PNG is: 10.23
+Mean Squared Error of : 10188041.PNG is: 952.98
+Peak Signal-to-Noise Ratio of : 10188041.PNG is: 18.34
+================================================================================
+Compressed File: 10287332.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 10287332.png : 2 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 10287332.png : 216980 bytes
+Size of the compressed file for 10287332.png : 13912 bytes
+Bytes saved from compression of 10287332.png : 203068 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 10287332.png : 0.94
+--------------------------------------------------------------------------------
+Decompress Execution Time for  10287332.png : 4 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 22337
+Unique pixel count after compression: 1894
+Unique pixel count reduction  for 10287332.png : 20443
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 10287332.png : 0.92
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 10287332.PNG is: 9.12
+Mean Squared Error of : 10287332.PNG is: 704.40
+Peak Signal-to-Noise Ratio of : 10287332.PNG is: 19.65
+================================================================================
+Compressed File: 11610969.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 11610969.png : 3 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 11610969.png : 368720 bytes
+Size of the compressed file for 11610969.png : 31817 bytes
+Bytes saved from compression of 11610969.png : 336903 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 11610969.png : 0.91
+--------------------------------------------------------------------------------
+Decompress Execution Time for  11610969.png : 4 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 84111
+Unique pixel count after compression: 4634
+Unique pixel count reduction  for 11610969.png : 79477
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 11610969.png : 0.94
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 11610969.PNG is: 18.98
+Mean Squared Error of : 11610969.PNG is: 2421.38
+Peak Signal-to-Noise Ratio of : 11610969.PNG is: 14.29
+================================================================================
+Compressed File: 10350842.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 10350842.png : 3 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 10350842.png : 212614 bytes
+Size of the compressed file for 10350842.png : 7712 bytes
+Bytes saved from compression of 10350842.png : 204902 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 10350842.png : 0.96
+--------------------------------------------------------------------------------
+Decompress Execution Time for  10350842.png : 4 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 42529
+Unique pixel count after compression: 1131
+Unique pixel count reduction  for 10350842.png : 41398
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 10350842.png : 0.97
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 10350842.PNG is: 16.96
+Mean Squared Error of : 10350842.PNG is: 1855.62
+Peak Signal-to-Noise Ratio of : 10350842.PNG is: 15.45
+================================================================================
+Compressed File: 10863862.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 10863862.png : 2 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 10863862.png : 317432 bytes
+Size of the compressed file for 10863862.png : 15377 bytes
+Bytes saved from compression of 10863862.png : 302055 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 10863862.png : 0.95
+--------------------------------------------------------------------------------
+Decompress Execution Time for  10863862.png : 3 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 66058
+Unique pixel count after compression: 2195
+Unique pixel count reduction  for 10863862.png : 63863
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 10863862.png : 0.97
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 10863862.PNG is: 23.05
+Mean Squared Error of : 10863862.PNG is: 3065.62
+Peak Signal-to-Noise Ratio of : 10863862.PNG is: 13.27
+================================================================================
+Compressed File: 11382381.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 11382381.png : 2 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 11382381.png : 312486 bytes
+Size of the compressed file for 11382381.png : 1432 bytes
+Bytes saved from compression of 11382381.png : 311054 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 11382381.png : 1.00
+--------------------------------------------------------------------------------
+Decompress Execution Time for  11382381.png : 4 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 46745
+Unique pixel count after compression: 194
+Unique pixel count reduction  for 11382381.png : 46551
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 11382381.png : 1.00
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 11382381.PNG is: 18.31
+Mean Squared Error of : 11382381.PNG is: 1924.64
+Peak Signal-to-Noise Ratio of : 11382381.PNG is: 15.29
+================================================================================
+Compressed File: 11079715.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 11079715.png : 5 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 11079715.png : 443815 bytes
+Size of the compressed file for 11079715.png : 132247 bytes
+Bytes saved from compression of 11079715.png : 311568 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 11079715.png : 0.70
+--------------------------------------------------------------------------------
+Decompress Execution Time for  11079715.png : 5 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 124136
+Unique pixel count after compression: 18385
+Unique pixel count reduction  for 11079715.png : 105751
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 11079715.png : 0.85
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 11079715.PNG is: 16.30
+Mean Squared Error of : 11079715.PNG is: 1952.24
+Peak Signal-to-Noise Ratio of : 11079715.PNG is: 15.23
+================================================================================
+Compressed File: 11551286.png
+--------------------------------------------------------------------------------
+Compress Execution Time for 11551286.png : 1 milliseconds
+--------------------------------------------------------------------------------
+Size of the original file for 11551286.png : 271883 bytes
+Size of the compressed file for 11551286.png : 1602 bytes
+Bytes saved from compression of 11551286.png : 270281 bytes
+Compression Rate (1 - compressedFileSize/originalFileSize) for 11551286.png : 0.99
+--------------------------------------------------------------------------------
+Decompress Execution Time for  11551286.png : 4 milliseconds
+--------------------------------------------------------------------------------
+Unique pixel count before compression: 40092
+Unique pixel count after compression: 236
+Unique pixel count reduction  for 11551286.png : 39856
+Unique Pixel Reduction Rate (1 - uniquePixelCountAfter/uniquePixelCountBefore) for 11551286.png : 0.99
+--------------------------------------------------------------------------------
+Mean Absolute Error of : 11551286.PNG is: 15.58
+Mean Squared Error of : 11551286.PNG is: 1453.96
+Peak Signal-to-Noise Ratio of : 11551286.PNG is: 16.51
+================================================================================

@@ -188,10 +188,6 @@ public class TestFrameWorkIndividual{
                     
                     System.out.println(uniquePixelCountBeforeOutput);
                     System.out.println(uniquePixelCountAfterOutput);
-                    
-                    testFrameWorkIndividual.writeToResult(uniquePixelCountBeforeOutput);
-                    testFrameWorkIndividual.writeToResult(uniquePixelCountAfterOutput);
-
 
                     long uniquePixelCountChange = uniquePixelCountBefore - uniquePixelCountAfter; 
                     double uniquePixelCountReductionRate = 1 - uniquePixelCountAfter / (double) uniquePixelCountBefore; 
@@ -281,6 +277,8 @@ public class TestFrameWorkIndividual{
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
                     testFrameWorkIndividual.writeToResult(decompressionExecutionOutput);
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+                    testFrameWorkIndividual.writeToResult(uniquePixelCountBeforeOutput);
+                    testFrameWorkIndividual.writeToResult(uniquePixelCountAfterOutput);
                     testFrameWorkIndividual.writeToResult(uniquePixelCountChangeOutput);
                     testFrameWorkIndividual.writeToResult(uniquePixelCountReductionRateOutput);
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
