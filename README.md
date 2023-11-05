@@ -8,6 +8,12 @@
 - [`DataAnalysis/Test231031/PerformanceDataAnalysis_Run1_Non_Norm_CRate.ipynb`](DataAnalysis/Test231031/PerformanceDataAnalysis_Run1_Non_Norm_CRate.ipynb): A sample Jupyter note book for data analysis and scoring 
 - [`TestResult/TestResult_20231105_111917.log`](TestResult/TestResult_20231105_111917.log): A sample log from the test framework. 
 
+## Compression Effect 
+
+| Before | After | 
+| --- | --- | 
+| ![image_b](Original/1254659.png) | ![image_a](Decompressed/1254659.png)| 
+
 ## Prerequisite
 
 1. Ensure that you have Java 20 or above installed. 
