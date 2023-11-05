@@ -38,6 +38,6 @@ build/
 java/build/**
 
 # log files
-*.log
+# *.log
 compressionSummaryData.csv
 DataAnalysis/.ipynb_checkpoints/PerformanceDataAnalysis-checkpoint.ipynb

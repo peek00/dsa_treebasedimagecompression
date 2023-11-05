@@ -96,10 +96,12 @@ public class TestFrameWorkIndividual{
         File directory = new File(ImageDirectory);
         File[] files = directory.listFiles();
 
+        testFrameWorkIndividual.writeToResult("================================================================================");
         testFrameWorkIndividual.writeToResult("testID: " + testFrameWorkIndividual.testID);
         testFrameWorkIndividual.writeToResult("quadtreeThreshold: " + quadtreeThreshold);
         testFrameWorkIndividual.writeToResult("allowedExceedingThreshold: " + allowedExceedingThresholdFactor);
         testFrameWorkIndividual.writeToResult("Image Directory: " + ImageDirectory);
+        testFrameWorkIndividual.writeToResult("================================================================================");
 
 
         if (files != null) {
@@ -200,11 +202,6 @@ public class TestFrameWorkIndividual{
                     System.out.println(uniquePixelCountChangeOutput);
                     System.out.println(uniquePixelCountReductionRateOutput);
 
-                    testFrameWorkIndividual.writeToResult(uniquePixelCountChangeOutput);
-                    testFrameWorkIndividual.writeToResult(uniquePixelCountReductionRateOutput);
-
-
-
                     //convert back to image for visualisation
                     PixeltoImageConverter PixeltoImageConverter = new PixeltoImageConverter(newPixelData);
                     PixeltoImageConverter.saveImage("Decompressed/" + imageName, "png");
@@ -284,6 +281,8 @@ public class TestFrameWorkIndividual{
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
                     testFrameWorkIndividual.writeToResult(decompressionExecutionOutput);
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
+                    testFrameWorkIndividual.writeToResult(uniquePixelCountChangeOutput);
+                    testFrameWorkIndividual.writeToResult(uniquePixelCountReductionRateOutput);
                     testFrameWorkIndividual.writeToResult("--------------------------------------------------------------------------------");
                     testFrameWorkIndividual.writeToResult(maeOutput);
                     testFrameWorkIndividual.writeToResult(mseOutput);
